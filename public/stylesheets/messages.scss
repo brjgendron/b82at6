@@ -1,7 +1,9 @@
 #messages-container {
 	margin: 0 auto;
 	width: calc(100% - 50px);
-	height: 100%;
+	height: calc(100% - 50px);
+	
+	overflow-y: scroll;
 
 	background: #F7F7F7;
 
