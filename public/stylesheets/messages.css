@@ -1,4 +1,6 @@
 #messages-container {
+  display: block;
+  position: static;
   margin: 0 auto;
   width: calc(100% - 50px);
   height: calc(100% - 50px);
@@ -11,6 +13,7 @@
 }
 
 #messages-container #messages li {
+  word-break: break-all;
   padding-top: 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid #DDDDDD;

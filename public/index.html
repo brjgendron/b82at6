@@ -24,8 +24,10 @@
 			var socket = io();
 			$('form').submit(function(e){
 				e.preventDefault(); // prevents page reloading
-				socket.emit('chat message', $('#chatbox').val());
-				$('#chatbox').val('');
+				if ($("#chatbox").val().length > 0) {
+					socket.emit('chat message', $('#chatbox').val());
+					$('#chatbox').val('');
+				}
 				return false;
 			});
 
@@ -42,6 +44,9 @@
 
 				$(`.${userID}`).css({"color":color});
 				$(`.${userID}`).css({"font-weight":"500"});
+
+				var messagesContainer = document.getElementById("messages-container");
+				messagesContainer.scrollTop = messagesContainer.scrollHeight + 50;
 			});
 
 			socket.on("user disconnect", function(userID, color) {
