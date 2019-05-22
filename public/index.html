@@ -25,8 +25,12 @@
 			$('form').submit(function(e){
 				e.preventDefault(); // prevents page reloading
 				if ($("#chatbox").val().length > 0) {
-					socket.emit('chat message', $('#chatbox').val());
-					$('#chatbox').val('');
+					if ($("#chatbox").val().length <= 2500) {
+						socket.emit('chat message', $('#chatbox').val());
+						$('#chatbox').val('');
+					} else {
+						alert(`Your messages exceeds the character limit of 2500`);
+					}
 				}
 				return false;
 			});
