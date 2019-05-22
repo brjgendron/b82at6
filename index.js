@@ -5,7 +5,7 @@ let socket = require("socket.io");
 let app = express();
 let server = http.createServer(app);
 let io = socket(server);
-let port = 3000;
+let port = process.env.PORT;
 let hostname = "0.0.0.0";
 
 function generateUserID(length) {
