@@ -1,0 +1,25 @@
+#messages-container {
+	margin: 0 auto;
+	width: calc(100% - 50px);
+	height: 100%;
+
+	background: #F7F7F7;
+
+	#messages {
+		list-style-type: none;
+		
+		li {
+			padding-top: 10px;
+			padding-bottom: 10px;
+			border-bottom: 1px solid #DDDDDD;
+			
+			#sender {
+				font-weight: 500;
+			}
+		}
+
+		.time {
+			color: #888888;
+		}
+	}
+}

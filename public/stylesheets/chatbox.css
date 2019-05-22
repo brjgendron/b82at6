@@ -1,0 +1,48 @@
+#chatbox-container {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  background: #F7F7F7;
+}
+
+#chatbox-container #compose {
+  height: 100%;
+}
+
+#chatbox-container #compose * {
+  border: 0;
+  height: 100%;
+  font-family: Inter;
+  font-size: 12pt;
+  font-weight: 300;
+  color: #333333;
+}
+
+#chatbox-container #compose #chatbox {
+  width: 100%;
+  padding-left: 25px;
+  background: #EEEEEE;
+}
+
+#chatbox-container #compose #chatbox ::-webkit-input-placeholder {
+  color: #888888;
+}
+
+#chatbox-container #compose #chatbox :-ms-input-placeholder {
+  color: #888888;
+}
+
+#chatbox-container #compose #chatbox ::-ms-input-placeholder {
+  color: #888888;
+}
+
+#chatbox-container #compose #chatbox ::placeholder {
+  color: #888888;
+}
+
+#chatbox-container #compose #send {
+  width: 100px;
+}
+/*# sourceMappingURL=chatbox.css.map */
