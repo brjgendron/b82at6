@@ -19,6 +19,8 @@
 	
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+	<script src="js/linkify.min.js"></script>
+	<!-- <script src="linkify-jquery.min.js"></script> -->
 	<script>
 		$(function () {
 			var socket = io();
@@ -36,15 +38,34 @@
 			});
 
 			socket.on('chat message', function(msg, userID, time, color){
+				let links = linkify.find(msg);
+				// let link = [];
+				let formattedMsg = msg;
+				for (var i = 0; i < links.length; i++) {
+					// link.push(`<a href=\"${links[i].href}\" target="_blank">${links[i].href}</a>`);
+					formattedMsg = msg.replace(links[i].href, `<a href=\"${links[i].href}\" target="_blank">${links[i].href}</a>`);
+					console.log(links[i].href);
+				}
+				console.log(links);
+				console.log(msg);
+				// console.log(link);
+				console.log(formattedMsg);
+
 				$('#messages').append(
 					$('<li>').append(
 						$("<span>", {class : "time"}).text(`[${time}] `)
 					).append(
 						$("<span>", {class : userID}).text(`${userID}: `)
 					).append(
-						$("<span>", {class : "message-text"}).text(`${msg}`)
+						$("<span>", {class : "message-text"}).html(`${formattedMsg}`)
 					)
 				);
+
+				// for (var i = 0; i < links.length; i++) {
+				// 	link = `<a href=\"${links[i].href}\">${links[i].href}</a>`;
+				
+				// 	$(".message-text").append(link);
+				// }
 
 				$(`.${userID}`).css({"color":color});
 				$(`.${userID}`).css({"font-weight":"500"});

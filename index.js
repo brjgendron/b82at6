@@ -11,7 +11,7 @@ let hostname = "0.0.0.0";
 function generateUserID(length) {
 	let result = "";
 	let charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	var charLength = charset.length;
+	let charLength = charset.length;
 
 	for (var i = 0; i < length; i++) {
 		result += charset.charAt(Math.floor(Math.random() * charLength));
@@ -20,14 +20,16 @@ function generateUserID(length) {
 	return result;
 }
 
-function randomColor() {
-	var result = "#";
-	let charset = "0123456789ABCDEF";
-	for (var i = 0; i < 6; i++) {
-		result += charset.charAt(Math.floor(Math.random() * charset.length));
+function randomColor(minBrightness, maxBrightness) {
+	let result = "rgb(";
+ //prevent the color from being unreadable against the background
+	// let charset = "0123456789ABCDEF";
+	for (var i = 0; i < 3; i++) {
+		result += `${Math.floor((Math.random() * (maxBrightness - minBrightness))) + minBrightness}, `;
 	}
-
-	return result;
+	let color = result.slice(0, -2);
+	color += ")"
+	return color;
 }
 
 
@@ -39,7 +41,7 @@ app.get("/", (req, res) => {
 
 io.on("connection", (socket) => {
 	let senderID = generateUserID(6);
-	let userColor = randomColor();
+	let userColor = randomColor(50, 200);
 	console.log(`user ${senderID} connected, assigned color ${userColor}`);
 	
 	io.emit("user connect", senderID, userColor);
