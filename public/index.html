@@ -11,10 +11,11 @@
 			#messages li:nth-child(odd) { background: #eee; }
 			#sender { font-weight: bold; }
 		</style> -->
+		<link rel="stylesheet" href="stylesheets/variables.css">
 		<link rel="stylesheet" href="stylesheets/reset.css">
 		<link rel="stylesheet" href="stylesheets/chatbox.css">
 		<link rel="stylesheet" href="stylesheets/messages.css">
-		<link rel="stylesheet" href="stylesheets/variables.css">
+		<link rel="stylesheet" href="stylesheets/users.css">
 	</head>
 	
 	<script src="/socket.io/socket.io.js"></script>
@@ -75,6 +76,8 @@
 			});
 
 			socket.on("user disconnect", function(userID, color) {
+				// $(`.${userID}`).remove();
+
 				$('#messages').append(
 					$('<li>').append(
 						$("<span>").text("User ").append(
@@ -89,16 +92,31 @@
 				$(`.${userID}`).css({"font-weight":"500"});
 			});
 
-			socket.on("user connect", function(userID, color) {
-				$('#messages').append(
-					$('<li>').append(
-						$("<span>").text("User ").append(
-							$("<span>", {class : userID}).text(`${userID} `)
-						).append(
-							$("<span>").text("has joined")
-						)
-					)
-				);
+			socket.on("user connect", function(userID, color, users) {
+				// $('#users').append(
+				// 		$('<li>', {class : users.splice(-1)[0][0]}).text(users.splice(-1)[0][0])
+				// );
+				$("#users").empty();
+				for (var i = 0; i < users.length; i++) {
+					$('#users').append(
+						$('<li>', {class : users[i][0]}).text(users[i][0])
+					);
+				}
+				// }
+				// if (!$("#users").has(`.${userID}`) /*#users does not contain .userID*/) {
+				// }
+
+				// console.log();
+				
+				// $('#messages').append(
+				// 	$('<li>').append(
+				// 		$("<span>").text("User ").append(
+				// 			$("<span>", {class : userID}).text(`${userID} `)
+				// 		).append(
+				// 			$("<span>").text("has joined")
+				// 		)
+				// 	)
+				// );
 
 				$(`.${userID}`).css({"color":color});
 				$(`.${userID}`).css({"font-weight":"500"});
@@ -109,6 +127,10 @@
 	<body>
 		<div id="messages-container">
 			<ul id="messages"></ul>
+		</div>
+
+		<div id="users-container">
+			<ul id="users"></ul>
 		</div>
 
 		<div id="chatbox-container">

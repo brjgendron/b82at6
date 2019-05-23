@@ -1,0 +1,19 @@
+#users-container {
+  width: 250px;
+  height: calc(100% - 50px);
+  padding-left: 25px;
+  padding-right: 25px;
+  overflow-y: scroll;
+  float: right;
+  clear: right;
+}
+
+#users-container #users {
+  list-style-type: none;
+}
+
+#users-container #users li {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+/*# sourceMappingURL=users.css.map */

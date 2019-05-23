@@ -1,0 +1,24 @@
+#users-container {
+	// display: inline-block;
+	width: 250px;
+	height: calc(100% - 50px);
+
+	padding-left: 25px;
+	padding-right: 25px;
+
+	overflow-y: scroll;
+	
+	float: right;
+	clear: right;
+
+	#users {
+		list-style-type: none;
+
+		li {
+			// word-break: break-all;
+			padding-top: 10px;
+			padding-bottom: 10px;
+			// border-bottom: 1px solid #DDDDDD;
+		}
+	}
+}

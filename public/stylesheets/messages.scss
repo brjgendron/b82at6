@@ -1,10 +1,13 @@
 #messages-container {
-	display: block;
-	position: static;
+	// display: inline-block;
+	// position: static;
 	margin: 0 auto;
-	width: calc(100% - 50px);
+	padding-left: 25px;
+	padding-right: 25px;
+	width: calc(100% - 250px);
 	height: calc(100% - 50px);
-	
+	float: left;
+	clear: left;
 	overflow-y: scroll;
 
 	background: #F7F7F7;

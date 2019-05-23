@@ -23,6 +23,7 @@
 #chatbox-container #compose #chatbox {
   width: 100%;
   padding-left: 25px;
+  padding-right: 25px;
   background: #EEEEEE;
 }
 

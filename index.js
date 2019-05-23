@@ -8,6 +8,7 @@ let io = socket(server);
 let port = process.env.PORT;
 let hostname = "0.0.0.0";
 
+
 function generateUserID(length) {
 	let result = "";
 	let charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -32,6 +33,10 @@ function randomColor(minBrightness, maxBrightness) {
 	return color;
 }
 
+function randomColorHsl(minL, maxL, saturation) {
+	let color = `hsl(${Math.floor(Math.random() * 360)}, ${saturation}%, ${Math.floor(Math.random() * (maxL - minL)) + minL}%)`;
+	return color;
+}
 
 app.use(express.static(`${__dirname}/public`));
 
@@ -39,12 +44,20 @@ app.get("/", (req, res) => {
 	res.sendFile(`${__dirname}/public/index.html`);
 });
 
+let users = [];
+let connectedUsers = 0;
+
 io.on("connection", (socket) => {
+	// let testUser = new User(generateUserID(6), randomColorHsl(35, 65, 75));
+	// console.log(testUser.color());
 	let senderID = generateUserID(6);
-	let userColor = randomColor(50, 200);
+	let userColor = randomColorHsl(35, 65, 100);
 	console.log(`user ${senderID} connected, assigned color ${userColor}`);
 	
-	io.emit("user connect", senderID, userColor);
+	users.push([senderID, userColor]);
+	connectedUsers++;
+	io.emit("user connect", senderID, userColor, users);
+	console.log(users);
 
 	socket.on("chat message", (msg, userID, time, color) => {
 		userID = senderID;
@@ -59,12 +72,13 @@ io.on("connection", (socket) => {
 	socket.on("disconnect", (userID, color) => {
 		userID = senderID;
 		color = userColor;
-
+		
+		connectedUsers--;
 		io.emit("user disconnect", userID, color);
 		console.log(`user ${userID} disconnected`);
 	});
 });
 
-server.listen(port, hostname, () => {
+server.listen(3000, hostname, () => {
 	console.log(`listening on port ${port}`);
 });
