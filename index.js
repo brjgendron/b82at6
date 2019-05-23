@@ -79,6 +79,6 @@ io.on("connection", (socket) => {
 	});
 });
 
-server.listen(3000, hostname, () => {
+server.listen(port, hostname, () => {
 	console.log(`listening on port ${port}`);
 });
