@@ -75,8 +75,16 @@
 				messagesContainer.scrollTop = messagesContainer.scrollHeight + 50;
 			});
 
-			socket.on("user disconnect", function(userID, color) {
-				// $(`.${userID}`).remove();
+			socket.on("user disconnect", function(userID, color, currentUsers) {
+				$("#users").empty();
+				for (var i = 0; i < currentUsers.length; i++) {
+					$('#users').append(
+						$('<li>', {class : currentUsers[i][0]}).text(currentUsers[i][0])
+					);
+					
+					$(`.${currentUsers[i][0]}`).css({"color":currentUsers[i][1]});
+					$(`.${currentUsers[i][0]}`).css({"font-weight":"500"});
+				}
 
 				$('#messages').append(
 					$('<li>').append(
@@ -101,6 +109,8 @@
 					$('#users').append(
 						$('<li>', {class : users[i][0]}).text(users[i][0])
 					);
+					$(`.${users[i][0]}`).css({"color":users[i][1]});
+					$(`.${users[i][0]}`).css({"font-weight":"500"});
 				}
 				// }
 				// if (!$("#users").has(`.${userID}`) /*#users does not contain .userID*/) {
@@ -108,16 +118,15 @@
 
 				// console.log();
 				
-				// $('#messages').append(
-				// 	$('<li>').append(
-				// 		$("<span>").text("User ").append(
-				// 			$("<span>", {class : userID}).text(`${userID} `)
-				// 		).append(
-				// 			$("<span>").text("has joined")
-				// 		)
-				// 	)
-				// );
-
+				$('#messages').append(
+					$('<li>').append(
+						$("<span>").text("User ").append(
+							$("<span>", {class : userID}).text(`${userID} `)
+						).append(
+							$("<span>").text("has joined")
+						)
+					)
+				);
 				$(`.${userID}`).css({"color":color});
 				$(`.${userID}`).css({"font-weight":"500"});
 			});
@@ -135,7 +144,7 @@
 
 		<div id="chatbox-container">
 			<form id="compose" action="">
-				<input id="chatbox" autocomplete="off" placeholder="Write a message">
+				<input id="chatbox" autocomplete="off" placeholder="Write a message" autofocus>
 				<!-- <button id="send">Send</button> -->
 			</form>
 		</div>

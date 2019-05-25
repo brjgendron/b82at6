@@ -69,13 +69,23 @@ io.on("connection", (socket) => {
 		console.log(`message: ${msg}\nsender: ${userID}\ntime: ${time}`);
 	});
 
-	socket.on("disconnect", (userID, color) => {
+	socket.on("disconnect", (userID, color, currentUsers) => {
 		userID = senderID;
 		color = userColor;
-		
+		currentUsers = users;
+		// console.log(users);
+		// console.log(currentUsers);
+		for (var i = 0; i < users.length; i++) {
+			if (userID == users[i][0] && color == users[i][1]) {
+				users.splice(i, 1);
+				console.log(users);
+			}
+		}
+
 		connectedUsers--;
-		io.emit("user disconnect", userID, color);
+		io.emit("user disconnect", userID, color, currentUsers);
 		console.log(`user ${userID} disconnected`);
+		console.log(currentUsers);
 	});
 });
 
