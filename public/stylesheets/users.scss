@@ -18,6 +18,10 @@
 			// word-break: break-all;
 			padding-top: 10px;
 			padding-bottom: 10px;
+
+			overflow-x: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
 			// border-bottom: 1px solid #DDDDDD;
 		}
 	}

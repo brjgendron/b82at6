@@ -1,7 +1,11 @@
 <!DOCTYPE html>
+
+<!-- emojis from Twemoji: https://twemoji.twitter.com/ -->
+
 <html>
 	<head>
 		<title>Chat.js</title>
+		<!-- <script src="https://twemoji.maxcdn.com/2/twemoji.min.js?12.0.2" integrity="sha384-UM2aSky5TK+LGnb3eZ/K+LVxUWpoO1zhIRURk37uiM39vD0oshUZyKZEh3Rd/Gyl" crossorigin="anonymous"></script> -->
 		<link rel="stylesheet" href="stylesheets/variables.css">
 		<link rel="stylesheet" href="stylesheets/reset.css">
 		<link rel="stylesheet" href="stylesheets/chatbox.css">
@@ -31,7 +35,7 @@
 		<script>
 				(() => {
 					var socket = io();
-
+					// twemoji.size = "36x36";
 					// const instanceID = Math.floor(Math.random() * 420);
 					let reprompt = true;
 
@@ -44,6 +48,7 @@
 
 					let chatbox = document.querySelector("#chatbox");
 					let charLimit = 2500;
+					let usernameLimit = 25;
 
 					let globalUsers;
 					let globalUser;
@@ -160,22 +165,31 @@
 					});
 
 					socket.on("user.connect", (users_, user_) => {
-						document.querySelector("#change-username").addEventListener("click", (event_) => {
+						document.querySelector("#change-username").onclick = (event_) => {
 							event_.preventDefault();
+							// let oldUsername = user_.username;
 							let newUsername = prompt("Enter a new username");
-								if (newUsername.length > 0) {
-									socket.emit("user.setusername", newUsername, user_);
-								}
-						});
+							if (newUsername.length > 0 && newUsername.length <= 25) {
+								socket.emit("user.setusername", newUsername, user_);
+								// reprompt = false;
+							} else if (newUsername.length > usernameLimit) {
+								alert("Your username exceeds the character limit of " + usernameLimit);
+							}
+						};
 
 						fillList(usersList, users_);
 						
-						messages.appendChild(genChatMessage("", user_, " has connected"));
+						messages.appendChild(genObj(user_, {html: "span", class: "", contents: "User "}, {html: "span", class: user_.id, contents: user_.id}, {html: "span", class: "", contents: " has connected"}));
+						// messages.appendChild(genChatMessage("", user_, " has connected"));
 						console.log(`user ${user_.username} has connected`);
 					});
 
-					socket.on("user.setusername", (users_, user_) => {
-						messages.appendChild(genObj(user_, {html: "span", class: "", contents: "User "}, {html: "span", class: user_.id, contents: user_.id}, {html: "span", class: "", contents: " has changed their username to "}, {html: "span", class: user_.id, contents: user_.username}));
+					socket.on("user.setusername", (users_, user_, oldUsername_) => {
+						if (user_.id != oldUsername_) {
+							messages.appendChild(genObj(user_, {html: "span", class: "", contents: "User "}, {html: "span", class: user_.id, contents: `${oldUsername_} (${user_.id})`}, {html: "span", class: "", contents: " has changed their username to "}, {html: "span", class: user_.id, contents: user_.username}));
+						} else {
+							messages.appendChild(genObj(user_, {html: "span", class: "", contents: "User "}, {html: "span", class: user_.id, contents: user_.id}, {html: "span", class: "", contents: " has changed their username to "}, {html: "span", class: user_.id, contents: user_.username}));
+						}
 						fillList(usersList, users_);
 					});
 
@@ -189,9 +203,21 @@
 
 					socket.on("user.disconnect", (users_, user_) => {
 						fillList(usersList, users_);
-						messages.appendChild(genChatMessage("", user_, " has disconnected"));
+						messages.appendChild(genObj(user_, {html: "span", class: "", contents: "User "}, {html: "span", class: user_.id, contents: user_.id}, {html: "span", class: "", contents: " has disconnected"}));
+						// messages.appendChild(genChatMessage("", user_, " has disconnected"));
 						console.log(`user ${user_.username} (${user_.id}) has disconnected`);
 					});
+
+					// setInterval(deeznuts.play(), 1000);
+					window.onclick = (event_) => {
+						socket.emit("deeznuts");
+						// deeznuts.play();
+					};
+					
+					socket.on("deeznuts", (deeznuts_) => {
+						let deeznuts = new Audio(deeznuts_);
+						deeznuts.play();
+					})
 				})();
 			</script>
 	</body>

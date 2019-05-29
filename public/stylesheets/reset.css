@@ -31,4 +31,12 @@ body a {
 body ul {
   list-style-type: none;
 }
+
+img.emoji {
+  width: 24px;
+  height: 24px;
+  margin-left: 2px;
+  margin-right: 2px;
+  vertical-align: -6px;
+}
 /*# sourceMappingURL=reset.css.map */

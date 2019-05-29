@@ -69,10 +69,11 @@ io.on("connection", (socket_) => {
 	console.log(io.engine.clientsCount);
 
 
-	socket_.on("user.setusername", (newUsername_, user_) => {
+	socket_.on("user.setusername", (newUsername_, oldUsername_, user_) => {
+		oldUsername_ = user.username;
 		user.username = newUsername_;
 		console.log(user.id, "has changed their username to", newUsername_);
-		io.emit("user.setusername", users, user);
+		io.emit("user.setusername", users, user, oldUsername_);
 	});
 
 	socket_.on("chat.message", (message_) => {
@@ -93,11 +94,16 @@ io.on("connection", (socket_) => {
 				users.splice(i, 1);
 			}
 		}
-		
+
 		io.emit("user.disconnect", users, user);
 		console.log(`\nuser ${lastUser.username} (${lastUser.id}) disconnected`);
 		console.log("currently connected users:", users); 
 	});
+
+	socket_.on("deeznuts", (deeznuts_) => {
+		deeznuts_ = "deeznuts.ogg";
+		io.emit("deeznuts", deeznuts_);
+	}); 
 });
 
 server.listen(port, hostname, () => {

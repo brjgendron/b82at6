@@ -16,6 +16,9 @@
 #users-container #users li {
   padding-top: 10px;
   padding-bottom: 10px;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 #users-container #change-username {
