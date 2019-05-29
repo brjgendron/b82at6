@@ -1,5 +1,5 @@
 #users-container {
-	// display: inline-block;
+	position: relative;
 	width: 250px;
 	height: calc(100% - 50px);
 
@@ -19,6 +19,26 @@
 			padding-top: 10px;
 			padding-bottom: 10px;
 			// border-bottom: 1px solid #DDDDDD;
+		}
+	}
+
+	#change-username {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 50px;
+		cursor: pointer;
+		text-align: center;
+		line-height: 50px;
+	
+		span {
+			display: inline-block;
+
+			img {
+				vertical-align: baseline;
+				margin-right: 10px;
+			}
 		}
 	}
 }

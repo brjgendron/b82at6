@@ -1,16 +1,7 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Chat.js</title>
-    <!-- <style>
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-			#messages li:nth-child(odd) { background: #eee; }
-			#sender { font-weight: bold; }
-		</style> -->
+	<head>
+		<title>Chat.js</title>
 		<link rel="stylesheet" href="stylesheets/variables.css">
 		<link rel="stylesheet" href="stylesheets/reset.css">
 		<link rel="stylesheet" href="stylesheets/chatbox.css">
@@ -19,120 +10,6 @@
 	</head>
 	
 	<script src="/socket.io/socket.io.js"></script>
-	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-	<script src="js/linkify.min.js"></script>
-	<!-- <script src="linkify-jquery.min.js"></script> -->
-	<script>
-		$(function () {
-			var socket = io();
-			$('form').submit(function(e){
-				e.preventDefault(); // prevents page reloading
-				if ($("#chatbox").val().length > 0) {
-					if ($("#chatbox").val().length <= 2500) {
-						socket.emit('chat message', $('#chatbox').val());
-						$('#chatbox').val('');
-					} else {
-						alert(`Your messages exceeds the character limit of 2500`);
-					}
-				}
-				return false;
-			});
-
-			socket.on('chat message', function(msg, userID, time, color){
-				let links = linkify.find(msg);
-				// let link = [];
-				let formattedMsg = msg;
-				for (var i = 0; i < links.length; i++) {
-					// link.push(`<a href=\"${links[i].href}\" target="_blank">${links[i].href}</a>`);
-					formattedMsg = msg.replace(links[i].href, `<a href=\"${links[i].href}\" target="_blank">${links[i].href}</a>`);
-					console.log(links[i].href);
-				}
-				console.log(links);
-				console.log(msg);
-				// console.log(link);
-				console.log(formattedMsg);
-
-				$('#messages').append(
-					$('<li>').append(
-						$("<span>", {class : "time"}).text(`[${time}] `)
-					).append(
-						$("<span>", {class : userID}).text(`${userID}: `)
-					).append(
-						$("<span>", {class : "message-text"}).text(`${msg}`)
-					)
-				);
-
-				// for (var i = 0; i < links.length; i++) {
-				// 	link = `<a href=\"${links[i].href}\">${links[i].href}</a>`;
-				
-				// 	$(".message-text").append(link);
-				// }
-
-				$(`.${userID}`).css({"color":color});
-				$(`.${userID}`).css({"font-weight":"500"});
-
-				var messagesContainer = document.getElementById("messages-container");
-				messagesContainer.scrollTop = messagesContainer.scrollHeight + 50;
-			});
-
-			socket.on("user disconnect", function(userID, color, currentUsers) {
-				$("#users").empty();
-				for (var i = 0; i < currentUsers.length; i++) {
-					$('#users').append(
-						$('<li>', {class : currentUsers[i][0]}).text(currentUsers[i][0])
-					);
-					
-					$(`.${currentUsers[i][0]}`).css({"color":currentUsers[i][1]});
-					$(`.${currentUsers[i][0]}`).css({"font-weight":"500"});
-				}
-
-				$('#messages').append(
-					$('<li>').append(
-						$("<span>").text("User ").append(
-							$("<span>", {class : userID}).text(`${userID} `)
-						).append(
-							$("<span>").text("has left")
-						)
-					)
-				);
-
-				$(`.${userID}`).css({"color":color});
-				$(`.${userID}`).css({"font-weight":"500"});
-			});
-
-			socket.on("user connect", function(userID, color, users) {
-				// $('#users').append(
-				// 		$('<li>', {class : users.splice(-1)[0][0]}).text(users.splice(-1)[0][0])
-				// );
-				$("#users").empty();
-				for (var i = 0; i < users.length; i++) {
-					$('#users').append(
-						$('<li>', {class : users[i][0]}).text(users[i][0])
-					);
-					$(`.${users[i][0]}`).css({"color":users[i][1]});
-					$(`.${users[i][0]}`).css({"font-weight":"500"});
-				}
-				// }
-				// if (!$("#users").has(`.${userID}`) /*#users does not contain .userID*/) {
-				// }
-
-				// console.log();
-				
-				$('#messages').append(
-					$('<li>').append(
-						$("<span>").text("User ").append(
-							$("<span>", {class : userID}).text(`${userID} `)
-						).append(
-							$("<span>").text("has joined")
-						)
-					)
-				);
-				$(`.${userID}`).css({"color":color});
-				$(`.${userID}`).css({"font-weight":"500"});
-			});
-		});
-	</script>
-
 	<body>
 		<div id="messages-container">
 			<ul id="messages"></ul>
@@ -140,13 +17,182 @@
 
 		<div id="users-container">
 			<ul id="users"></ul>
+			<div id="change-username">
+				<span><img src="icons/edit.svg" alt="">Change Username</span>
+			</div>
 		</div>
 
 		<div id="chatbox-container">
-			<form id="compose" action="">
-				<input id="chatbox" autocomplete="off" placeholder="Write a message" autofocus>
-				<!-- <button id="send">Send</button> -->
+			<form id="compose">
+				<input id="chatbox" type="text" autocomplete="off" placeholder="Write a message" autofocus>
 			</form>
 		</div>
+
+		<script>
+				(() => {
+					var socket = io();
+
+					// const instanceID = Math.floor(Math.random() * 420);
+					let reprompt = true;
+
+					let connectedUsers;
+
+					let messages = document.querySelector("#messages");
+					let usersList = document.querySelector("#users");
+					let editIcon = document.createElement("img");
+					editIcon.setAttribute("src", "icons/edit.svg");
+
+					let chatbox = document.querySelector("#chatbox");
+					let charLimit = 2500;
+
+					let globalUsers;
+					let globalUser;
+
+					function genObj(sender_) {
+						let messageJSON = {
+							container: {
+								html: document.createElement("li"),
+								class: "message"
+							}
+						};
+
+						// let argumentValues = Object.values(arguments);
+						for (var i = 1; i < arguments.length; i++) {
+							// console.log(Object.values(arguments[i]));
+							messageJSON[`domObj${i}`] = {
+								html: document.createElement(Object.values(arguments[i])[0]),
+								class: Object.values(arguments[i])[1],
+								contents: Object.values(arguments[i])[2]
+							}
+						}
+
+						const values = Object.values(messageJSON);
+						for (var x = 0; x < values.length; x++) {
+							if (x < values.length - 1) {
+								let y = x;
+								values[0].html.appendChild(values.slice(1)[y].html)
+							}
+
+							if (values[x].class !== "") {
+								values[x].html.classList.add(values[x].class);
+								
+								if (values[x].class === sender_.id) {
+									values[x].html.setAttribute("style", `color: ${sender_.color}; font-weight: 500;`);
+								}
+							}
+
+							if (values[x].contents != undefined) values[x].html.appendChild(document.createTextNode(values[x].contents));
+
+							// console.log(values[x].html);
+						}
+
+						return messageJSON.container.html;
+					}
+
+					// console.log(genObj({html: "span", class: "", contents: "user "}, {html: "span", class: "id", contents: "id"}, {html: "span", class: "", contents: "has changed their username to "}, {html: "span", class: "id", contents: "username"}));
+
+					function genChatMessage(messageTimestamp_, messageSender_, messageText_) {
+						let chatMessage = {
+							messageContainer: {
+								html: document.createElement("li"),
+								class: "message",
+								contents: ""
+							},
+
+							messageTimestamp: {
+								html: document.createElement("span"),
+								class: "message-timestamp",
+								contents: messageTimestamp_
+							},
+
+							messageSender: {
+								html: document.createElement("span"),
+								class: messageSender_.id,
+								contents: messageSender_.username
+							},
+
+							messageText: {
+								html: document.createElement("span"),
+								class: "message-text",
+								contents: messageText_
+							}
+						}
+
+						const values = Object.values(chatMessage);
+						for (var x = 0; x < values.length; x++) {
+							if (x < 3) {
+								let y = x;
+								values[0].html.appendChild(values.slice(1)[y].html)
+							}
+
+							values[x].html.classList.add(values[x].class);
+							values[x].html.appendChild(document.createTextNode(values[x].contents));
+						}
+
+						chatMessage.messageSender.html.setAttribute("style", `color: ${messageSender_.color}; font-weight: 500;`);
+						return chatMessage.messageContainer.html;
+					}
+
+					function fillList(list_ = [], items_) {
+						let listItem;
+
+						while (list_.firstChild) {
+							list_.removeChild(list_.firstChild);
+						}
+						
+						for (var i = 0; i < items_.length; i++) {
+							listItem = document.createElement("li");
+							listItem.classList.add(items_[i].id);
+							listItem.setAttribute("style", `color: ${items_[i].color}; font-weight: 500`);
+							listItem.appendChild(document.createTextNode(items_[i].username));
+							list_.appendChild(listItem);
+						}
+					}
+					
+					document.querySelector("#compose").addEventListener("submit", (event_) => {
+						event_.preventDefault();
+						if (chatbox.value.length > 0 && chatbox.value.length <= charLimit) {
+							socket.emit("chat.message", chatbox.value);
+							chatbox.value = "";
+						} else if (chatbox.value.length > charLimit) {
+							alert(`Your message exceeds the character limit of ${charLimit}`);
+						}
+					});
+
+					socket.on("user.connect", (users_, user_) => {
+						document.querySelector("#change-username").addEventListener("click", (event_) => {
+							event_.preventDefault();
+							let newUsername = prompt("Enter a new username");
+								if (newUsername.length > 0) {
+									socket.emit("user.setusername", newUsername, user_);
+								}
+						});
+
+						fillList(usersList, users_);
+						
+						messages.appendChild(genChatMessage("", user_, " has connected"));
+						console.log(`user ${user_.username} has connected`);
+					});
+
+					socket.on("user.setusername", (users_, user_) => {
+						messages.appendChild(genObj(user_, {html: "span", class: "", contents: "User "}, {html: "span", class: user_.id, contents: user_.id}, {html: "span", class: "", contents: " has changed their username to "}, {html: "span", class: user_.id, contents: user_.username}));
+						fillList(usersList, users_);
+					});
+
+					socket.on("chat.message", (message_) => {
+						messages.appendChild(genChatMessage(`[${message_.timestamp}] `, message_.sender, `: ${message_.message}`));
+						document.querySelector("#messages-container").scrollTop = document.querySelector("#messages-container").scrollHeight;
+
+						console.log(`[${message_.timestamp}] ${message_.sender.username}: ${message_.message}`);
+					});
+
+
+					socket.on("user.disconnect", (users_, user_) => {
+						fillList(usersList, users_);
+						messages.appendChild(genChatMessage("", user_, " has disconnected"));
+						console.log(`user ${user_.username} (${user_.id}) has disconnected`);
+					});
+				})();
+			</script>
 	</body>
 </html>

@@ -8,8 +8,14 @@ let io = socket(server);
 let port = process.env.PORT;
 let hostname = "0.0.0.0";
 
+app.use(express.static(`${__dirname}/public`));
 
-function generateUserID(length) {
+app.get("/", (req, res) => {
+	res.sendFile(`${__dirname}/public/index.html`);
+});
+
+
+function genUserID(length) {
 	let result = "";
 	let charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 	let charLength = charset.length;
@@ -21,71 +27,76 @@ function generateUserID(length) {
 	return result;
 }
 
-function randomColor(minBrightness, maxBrightness) {
-	let result = "rgb(";
- //prevent the color from being unreadable against the background
-	// let charset = "0123456789ABCDEF";
-	for (var i = 0; i < 3; i++) {
-		result += `${Math.floor((Math.random() * (maxBrightness - minBrightness))) + minBrightness}, `;
-	}
-	let color = result.slice(0, -2);
-	color += ")"
-	return color;
-}
-
-function randomColorHsl(minL, maxL, saturation) {
+function genColorHsl(minL, maxL, saturation) {
 	let color = `hsl(${Math.floor(Math.random() * 360)}, ${saturation}%, ${Math.floor(Math.random() * (maxL - minL)) + minL}%)`;
 	return color;
 }
 
-app.use(express.static(`${__dirname}/public`));
+function genTimestamp() {
+	dateTime = new Date();
+	return `${(dateTime.getMonth() + 1)}/${dateTime.getDate()}/${dateTime.getFullYear()} ${dateTime.getHours()}:${dateTime.getMinutes()}:${dateTime.getSeconds()}`;
+}
 
-app.get("/", (req, res) => {
-	res.sendFile(`${__dirname}/public/index.html`);
-});
+class User {
+	constructor(id, username, color) {
+		this.id = id;
+		if (username != "") {
+			this.username = username;
+		} else {
+			this.username = id;
+		}
+		this.color = color;
+	}
+}
+
+class Message {
+	constructor(message, sender, timestamp) {
+		this.message = message;
+		this.sender = sender;
+		this.timestamp = timestamp;
+	}
+}
 
 let users = [];
-let connectedUsers = 0;
 
-io.on("connection", (socket) => {
-	// let testUser = new User(generateUserID(6), randomColorHsl(35, 65, 75));
-	// console.log(testUser.color());
-	let senderID = generateUserID(6);
-	let userColor = randomColorHsl(35, 65, 100);
-	console.log(`user ${senderID} connected, assigned color ${userColor}`);
-	
-	users.push([senderID, userColor]);
-	connectedUsers++;
-	io.emit("user connect", senderID, userColor, users);
-	console.log(users);
+io.on("connection", (socket_) => {
+	let user = new User(genUserID(6), "", genColorHsl(35, 65, 80));
+	users.push(user);
 
-	socket.on("chat message", (msg, userID, time, color) => {
-		userID = senderID;
-		dateTime = new Date();
-		time = `${(dateTime.getMonth() + 1)}/${dateTime.getDate()}/${dateTime.getFullYear()} ${dateTime.getHours()}:${dateTime.getMinutes()}:${dateTime.getSeconds()}`;
-		color = userColor;
+	io.emit("user.connect", users, user);
+	console.log(`\nuser ${users.slice(-1)[0].username} connected`);
+	console.log("currently connected users:", users); 
+	console.log(io.engine.clientsCount);
 
-		io.emit("chat message", msg, userID, time, color);
-		console.log(`message: ${msg}\nsender: ${userID}\ntime: ${time}`);
+
+	socket_.on("user.setusername", (newUsername_, user_) => {
+		user.username = newUsername_;
+		console.log(user.id, "has changed their username to", newUsername_);
+		io.emit("user.setusername", users, user);
 	});
 
-	socket.on("disconnect", (userID, color, currentUsers) => {
-		userID = senderID;
-		color = userColor;
-		currentUsers = users;
-		// console.log(users);
-		// console.log(currentUsers);
+	socket_.on("chat.message", (message_) => {
+		timestamp = genTimestamp();
+		let message = new Message(message_, user, timestamp);
+
+		io.emit("chat.message", message);
+		console.log(`\n[${message.timestamp}] ${message.sender.username}: ${message.message}`);
+	});
+
+
+	socket_.on("disconnect", () => {
+		let lastUser;
+
 		for (var i = 0; i < users.length; i++) {
-			if (userID == users[i][0] && color == users[i][1]) {
+			if (user == users[i]) {
+				lastUser = users[i];
 				users.splice(i, 1);
-				console.log(users);
 			}
 		}
-
-		connectedUsers--;
-		io.emit("user disconnect", userID, color, currentUsers);
-		console.log(`user ${userID} disconnected`);
-		console.log(currentUsers);
+		
+		io.emit("user.disconnect", users, user);
+		console.log(`\nuser ${lastUser.username} (${lastUser.id}) disconnected`);
+		console.log("currently connected users:", users); 
 	});
 });
 

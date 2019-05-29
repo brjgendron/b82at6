@@ -21,11 +21,7 @@
   border-bottom: 1px solid #DDDDDD;
 }
 
-#messages-container #messages li #sender {
-  font-weight: 500;
-}
-
-#messages-container #messages .time {
+#messages-container #messages li .message-timestamp {
   color: #888888;
 }
 /*# sourceMappingURL=messages.css.map */

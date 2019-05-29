@@ -20,14 +20,10 @@
 			padding-top: 10px;
 			padding-bottom: 10px;
 			border-bottom: 1px solid #DDDDDD;
-			
-			#sender {
-				font-weight: 500;
+		
+			.message-timestamp {
+				color: #888888;
 			}
-		}
-
-		.time {
-			color: #888888;
 		}
 	}
 }

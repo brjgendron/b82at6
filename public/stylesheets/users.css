@@ -1,4 +1,5 @@
 #users-container {
+  position: relative;
   width: 250px;
   height: calc(100% - 50px);
   padding-left: 25px;
@@ -15,5 +16,25 @@
 #users-container #users li {
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+#users-container #change-username {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 50px;
+}
+
+#users-container #change-username span {
+  display: inline-block;
+}
+
+#users-container #change-username span img {
+  vertical-align: baseline;
+  margin-right: 10px;
 }
 /*# sourceMappingURL=users.css.map */
