@@ -6,7 +6,7 @@
 	width: 100%;
 	height: 50px;
 
-	background: #F7F7F7;
+	background: inherit;
 	#compose {
 		height: 100%;
 		
@@ -18,7 +18,7 @@
 			font-size: 12pt;
 			font-weight: 300;
 		
-			color: #333333;
+			color: hsl(0, 0%, 80%);
 		}
 		
 		#chatbox {
@@ -26,9 +26,9 @@
 			padding-left: 25px;
 			padding-right: 25px;
 			
-			background: #EEEEEE;
+			background: hsl(0, 0%, 25%);
 			::placeholder {
-				color: #888888;
+				color: hsl(0, 0%, 30%);
 			}
 			// height: 100%;
 		}

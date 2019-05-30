@@ -10,7 +10,7 @@ html {
           box-sizing: border-box;
   margin: 0;
   padding: 0;
-  color: #333333;
+  color: #cccccc;
 }
 
 html, body {
@@ -19,7 +19,7 @@ html, body {
 }
 
 body {
-  background: #F7F7F7;
+  background: #333333;
 }
 
 body a {
@@ -30,13 +30,5 @@ body a {
 
 body ul {
   list-style-type: none;
-}
-
-img.emoji {
-  width: 24px;
-  height: 24px;
-  margin-left: 2px;
-  margin-right: 2px;
-  vertical-align: -6px;
 }
 /*# sourceMappingURL=reset.css.map */

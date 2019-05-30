@@ -6,8 +6,7 @@
   height: calc(100% - 50px);
   float: left;
   clear: left;
-  overflow-y: scroll;
-  background: #F7F7F7;
+  background: inherit;
 }
 
 #messages-container #messages {
@@ -18,7 +17,7 @@
   word-break: break-all;
   padding-top: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #DDDDDD;
+  border-bottom: 1px solid #4d4d4d;
 }
 
 #messages-container #messages li .message-timestamp {

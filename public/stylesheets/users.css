@@ -2,9 +2,10 @@
   position: relative;
   width: 250px;
   height: calc(100% - 50px);
+  background: #333333;
   padding-left: 25px;
   padding-right: 25px;
-  overflow-y: scroll;
+  padding-bottom: 50px;
   float: right;
   clear: right;
 }
@@ -22,14 +23,15 @@
 }
 
 #users-container #change-username {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+  position: fixed;
+  bottom: 50px;
+  right: 0;
+  width: 250px;
   height: 50px;
   cursor: pointer;
   text-align: center;
   line-height: 50px;
+  background: #333333;
 }
 
 #users-container #change-username span {

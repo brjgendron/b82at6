@@ -11,15 +11,18 @@
 		<link rel="stylesheet" href="stylesheets/chatbox.css">
 		<link rel="stylesheet" href="stylesheets/messages.css">
 		<link rel="stylesheet" href="stylesheets/users.css">
+
+		<link rel="stylesheet" href="https://unpkg.com/simplebar@latest/dist/simplebar.css" />
+		<script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js"></script>
 	</head>
 	
 	<script src="/socket.io/socket.io.js"></script>
 	<body>
-		<div id="messages-container">
+		<div id="messages-container" data-simplebar>
 			<ul id="messages"></ul>
 		</div>
 
-		<div id="users-container">
+		<div id="users-container" data-simplebar>
 			<ul id="users"></ul>
 			<div id="change-username">
 				<span><img src="icons/edit.svg" alt="">Change Username</span>
@@ -34,6 +37,7 @@
 
 		<script>
 				(() => {
+					// new SimpleBar(document.querySelector("#messages-container"));
 					var socket = io();
 					// twemoji.size = "36x36";
 					// const instanceID = Math.floor(Math.random() * 420);
@@ -195,7 +199,7 @@
 
 					socket.on("chat.message", (message_) => {
 						messages.appendChild(genChatMessage(`[${message_.timestamp}] `, message_.sender, `: ${message_.message}`));
-						document.querySelector("#messages-container").scrollTop = document.querySelector("#messages-container").scrollHeight;
+						document.querySelector("#messages-container").SimpleBar.getScrollElement().scrollTop = document.querySelector("#messages-container").scrollHeight;
 
 						console.log(`[${message_.timestamp}] ${message_.sender.username}: ${message_.message}`);
 					});
