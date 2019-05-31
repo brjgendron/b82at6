@@ -101,7 +101,13 @@
 	socket.on("chat.message", (message_) => {
 		messages.appendChild(genListObj(message_.sender, {html: "span", class: "message-timestamp", contents: `[${message_.timestamp}] `}, {html: "span", class: message_.sender.id, contents: message_.sender.username}, {html: "span", class: "message-text", contents: `: ${message_.message}`}));
 		
-		document.querySelector("#messages-container").SimpleBar.getScrollElement().scrollTop = document.querySelector("#messages-container").scrollHeight;
+		document.querySelector("#messages-container").SimpleBar.getScrollElement().scrollTop = document.querySelector("#messages-container").SimpleBar.getScrollElement().scrollHeight;
+
+		// document.querySelector("#messages-container").scrollTop = document.querySelector("#messages-container").scrollHeight;
+
+		console.log("scrollTop:", document.querySelector("#messages-container").scrollTop, "scrollHeight:", document.querySelector("#messages-container").scrollHeight);
+
+		console.log("SimpleBar.scrollTop:", document.querySelector("#messages-container").SimpleBar.getScrollElement().scrollTop, "SimpleBar.scrollHeight:", document.querySelector("#messages-container").SimpleBar.getScrollElement().scrollHeight);
 
 		console.log(`[${message_.timestamp}] ${message_.sender.username}: ${message_.message}`);
 	});
