@@ -5,7 +5,7 @@ let socket = require("socket.io");
 let app = express();
 let server = http.createServer(app);
 let io = socket(server);
-let port = process.env.PORT;
+const port = process.env.PORT || 3000;
 let hostname = "0.0.0.0";
 
 app.use(express.static(`${__dirname}/public`));
@@ -60,7 +60,7 @@ class Message {
 let users = [];
 
 io.on("connection", (socket_) => {
-	let user = new User(genUserID(6), "", genColorHsl(35, 65, 80));
+	let user = new User(genUserID(6), "", genColorHsl(50, 80, 90));
 	users.push(user);
 
 	io.emit("user.connect", users, user);

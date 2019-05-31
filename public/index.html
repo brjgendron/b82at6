@@ -1,22 +1,16 @@
 <!DOCTYPE html>
-
-<!-- emojis from Twemoji: https://twemoji.twitter.com/ -->
-
 <html>
 	<head>
 		<title>Chat.js</title>
-		<!-- <script src="https://twemoji.maxcdn.com/2/twemoji.min.js?12.0.2" integrity="sha384-UM2aSky5TK+LGnb3eZ/K+LVxUWpoO1zhIRURk37uiM39vD0oshUZyKZEh3Rd/Gyl" crossorigin="anonymous"></script> -->
-		<link rel="stylesheet" href="stylesheets/variables.css">
-		<link rel="stylesheet" href="stylesheets/reset.css">
-		<link rel="stylesheet" href="stylesheets/chatbox.css">
-		<link rel="stylesheet" href="stylesheets/messages.css">
-		<link rel="stylesheet" href="stylesheets/users.css">
+		<!-- local resources -->
+		<script src="/socket.io/socket.io.js"></script>
+		<link rel="stylesheet" href="stylesheets/master.css">
 
+		<!-- external resources -->
 		<link rel="stylesheet" href="https://unpkg.com/simplebar@latest/dist/simplebar.css" />
 		<script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js"></script>
 	</head>
-	
-	<script src="/socket.io/socket.io.js"></script>
+
 	<body>
 		<div id="messages-container" data-simplebar>
 			<ul id="messages"></ul>
@@ -25,7 +19,7 @@
 		<div id="users-container" data-simplebar>
 			<ul id="users"></ul>
 			<div id="change-username">
-				<span><img src="icons/edit.svg" alt="">Change Username</span>
+				<span><img src="icons/edit-dark.svg" alt="">Change Username</span>
 			</div>
 		</div>
 
@@ -34,195 +28,7 @@
 				<input id="chatbox" type="text" autocomplete="off" placeholder="Write a message" autofocus>
 			</form>
 		</div>
-
-		<script>
-				(() => {
-					// new SimpleBar(document.querySelector("#messages-container"));
-					var socket = io();
-					// twemoji.size = "36x36";
-					// const instanceID = Math.floor(Math.random() * 420);
-					let reprompt = true;
-
-					let connectedUsers;
-
-					let messages = document.querySelector("#messages");
-					let usersList = document.querySelector("#users");
-					let editIcon = document.createElement("img");
-					editIcon.setAttribute("src", "icons/edit.svg");
-
-					let chatbox = document.querySelector("#chatbox");
-					let charLimit = 2500;
-					let usernameLimit = 25;
-
-					let globalUsers;
-					let globalUser;
-
-					function genObj(sender_) {
-						let messageJSON = {
-							container: {
-								html: document.createElement("li"),
-								class: "message"
-							}
-						};
-
-						// let argumentValues = Object.values(arguments);
-						for (var i = 1; i < arguments.length; i++) {
-							// console.log(Object.values(arguments[i]));
-							messageJSON[`domObj${i}`] = {
-								html: document.createElement(Object.values(arguments[i])[0]),
-								class: Object.values(arguments[i])[1],
-								contents: Object.values(arguments[i])[2]
-							}
-						}
-
-						const values = Object.values(messageJSON);
-						for (var x = 0; x < values.length; x++) {
-							if (x < values.length - 1) {
-								let y = x;
-								values[0].html.appendChild(values.slice(1)[y].html)
-							}
-
-							if (values[x].class !== "") {
-								values[x].html.classList.add(values[x].class);
-								
-								if (values[x].class === sender_.id) {
-									values[x].html.setAttribute("style", `color: ${sender_.color}; font-weight: 500;`);
-								}
-							}
-
-							if (values[x].contents != undefined) values[x].html.appendChild(document.createTextNode(values[x].contents));
-
-							// console.log(values[x].html);
-						}
-
-						return messageJSON.container.html;
-					}
-
-					// console.log(genObj({html: "span", class: "", contents: "user "}, {html: "span", class: "id", contents: "id"}, {html: "span", class: "", contents: "has changed their username to "}, {html: "span", class: "id", contents: "username"}));
-
-					function genChatMessage(messageTimestamp_, messageSender_, messageText_) {
-						let chatMessage = {
-							messageContainer: {
-								html: document.createElement("li"),
-								class: "message",
-								contents: ""
-							},
-
-							messageTimestamp: {
-								html: document.createElement("span"),
-								class: "message-timestamp",
-								contents: messageTimestamp_
-							},
-
-							messageSender: {
-								html: document.createElement("span"),
-								class: messageSender_.id,
-								contents: messageSender_.username
-							},
-
-							messageText: {
-								html: document.createElement("span"),
-								class: "message-text",
-								contents: messageText_
-							}
-						}
-
-						const values = Object.values(chatMessage);
-						for (var x = 0; x < values.length; x++) {
-							if (x < 3) {
-								let y = x;
-								values[0].html.appendChild(values.slice(1)[y].html)
-							}
-
-							values[x].html.classList.add(values[x].class);
-							values[x].html.appendChild(document.createTextNode(values[x].contents));
-						}
-
-						chatMessage.messageSender.html.setAttribute("style", `color: ${messageSender_.color}; font-weight: 500;`);
-						return chatMessage.messageContainer.html;
-					}
-
-					function fillList(list_ = [], items_) {
-						let listItem;
-
-						while (list_.firstChild) {
-							list_.removeChild(list_.firstChild);
-						}
-						
-						for (var i = 0; i < items_.length; i++) {
-							listItem = document.createElement("li");
-							listItem.classList.add(items_[i].id);
-							listItem.setAttribute("style", `color: ${items_[i].color}; font-weight: 500`);
-							listItem.appendChild(document.createTextNode(items_[i].username));
-							list_.appendChild(listItem);
-						}
-					}
-					
-					document.querySelector("#compose").addEventListener("submit", (event_) => {
-						event_.preventDefault();
-						if (chatbox.value.length > 0 && chatbox.value.length <= charLimit) {
-							socket.emit("chat.message", chatbox.value);
-							chatbox.value = "";
-						} else if (chatbox.value.length > charLimit) {
-							alert(`Your message exceeds the character limit of ${charLimit}`);
-						}
-					});
-
-					socket.on("user.connect", (users_, user_) => {
-						document.querySelector("#change-username").onclick = (event_) => {
-							event_.preventDefault();
-							// let oldUsername = user_.username;
-							let newUsername = prompt("Enter a new username");
-							if (newUsername.length > 0 && newUsername.length <= 25) {
-								socket.emit("user.setusername", newUsername, user_);
-								// reprompt = false;
-							} else if (newUsername.length > usernameLimit) {
-								alert("Your username exceeds the character limit of " + usernameLimit);
-							}
-						};
-
-						fillList(usersList, users_);
-						
-						messages.appendChild(genObj(user_, {html: "span", class: "", contents: "User "}, {html: "span", class: user_.id, contents: user_.id}, {html: "span", class: "", contents: " has connected"}));
-						// messages.appendChild(genChatMessage("", user_, " has connected"));
-						console.log(`user ${user_.username} has connected`);
-					});
-
-					socket.on("user.setusername", (users_, user_, oldUsername_) => {
-						if (user_.id != oldUsername_) {
-							messages.appendChild(genObj(user_, {html: "span", class: "", contents: "User "}, {html: "span", class: user_.id, contents: `${oldUsername_} (${user_.id})`}, {html: "span", class: "", contents: " has changed their username to "}, {html: "span", class: user_.id, contents: user_.username}));
-						} else {
-							messages.appendChild(genObj(user_, {html: "span", class: "", contents: "User "}, {html: "span", class: user_.id, contents: user_.id}, {html: "span", class: "", contents: " has changed their username to "}, {html: "span", class: user_.id, contents: user_.username}));
-						}
-						fillList(usersList, users_);
-					});
-
-					socket.on("chat.message", (message_) => {
-						messages.appendChild(genChatMessage(`[${message_.timestamp}] `, message_.sender, `: ${message_.message}`));
-						document.querySelector("#messages-container").SimpleBar.getScrollElement().scrollTop = document.querySelector("#messages-container").scrollHeight;
-
-						console.log(`[${message_.timestamp}] ${message_.sender.username}: ${message_.message}`);
-					});
-
-
-					socket.on("user.disconnect", (users_, user_) => {
-						fillList(usersList, users_);
-						messages.appendChild(genObj(user_, {html: "span", class: "", contents: "User "}, {html: "span", class: user_.id, contents: user_.id}, {html: "span", class: "", contents: " has disconnected"}));
-						// messages.appendChild(genChatMessage("", user_, " has disconnected"));
-						console.log(`user ${user_.username} (${user_.id}) has disconnected`);
-					});
-
-					// setInterval(deeznuts.play(), 1000);
-					window.onclick = (event_) => {
-						// socket.emit("deeznuts");
-						// deeznuts.play();
-					};
-					
-					socket.on("deeznuts", (deeznuts_) => {
-						let deeznuts = new Audio(deeznuts_);
-						deeznuts.play();
-					})
-				})();
-			</script>
+		
+		<script src="js/events.js"></script>
 	</body>
 </html>

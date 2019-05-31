@@ -1,0 +1,154 @@
+@import url("https://rsms.me/inter/inter.css");
+html {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 12pt;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: #cccccc;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+}
+
+body {
+  background: #333333;
+}
+
+body a {
+  text-decoration: none;
+  font-weight: 500;
+  color: #50A9FC;
+}
+
+body ul {
+  list-style-type: none;
+}
+
+#messages-container {
+  margin: 0 auto;
+  padding-left: 25px;
+  padding-right: 25px;
+  width: calc(100% - 250px);
+  height: calc(100% - 50px);
+  float: left;
+  clear: left;
+  background: inherit;
+}
+
+#messages-container #messages {
+  list-style-type: none;
+}
+
+#messages-container #messages li {
+  word-break: break-all;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #4d4d4d;
+}
+
+#messages-container #messages li .message-timestamp {
+  color: #bfbfbf;
+}
+
+#users-container {
+  position: relative;
+  width: 250px;
+  height: calc(100% - 50px);
+  background: #333333;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom: 50px;
+  float: right;
+  clear: right;
+}
+
+#users-container #users {
+  list-style-type: none;
+}
+
+#users-container #users li {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+#users-container #change-username {
+  position: fixed;
+  bottom: 50px;
+  right: 0;
+  width: 250px;
+  height: 50px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 50px;
+  background: #333333;
+}
+
+#users-container #change-username span {
+  display: inline-block;
+}
+
+#users-container #change-username span img {
+  vertical-align: -1px;
+  margin-right: 10px;
+}
+
+#chatbox-container {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  background: inherit;
+}
+
+#chatbox-container #compose {
+  height: 100%;
+}
+
+#chatbox-container #compose * {
+  border: 0;
+  height: 100%;
+  font-family: Inter;
+  font-size: 12pt;
+  font-weight: 300;
+  color: #cccccc;
+}
+
+#chatbox-container #compose #chatbox {
+  width: 100%;
+  padding-left: 25px;
+  padding-right: 25px;
+  background: #404040;
+}
+
+#chatbox-container #compose #chatbox ::-webkit-input-placeholder {
+  color: #4d4d4d;
+}
+
+#chatbox-container #compose #chatbox :-ms-input-placeholder {
+  color: #4d4d4d;
+}
+
+#chatbox-container #compose #chatbox ::-ms-input-placeholder {
+  color: #4d4d4d;
+}
+
+#chatbox-container #compose #chatbox ::placeholder {
+  color: #4d4d4d;
+}
+
+#chatbox-container #compose #send {
+  width: 100px;
+}
+/*# sourceMappingURL=master.css.map */

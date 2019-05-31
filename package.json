@@ -11,8 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.0",
-    "linkify": "^0.2.1",
-    "linkifyjs": "^2.1.8",
+    "mongodb": "^3.2.6",
     "socket.io": "^2.2.0",
     "uri.js": "^0.1.3"
   },
