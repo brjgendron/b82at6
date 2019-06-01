@@ -1,10 +1,20 @@
-let http = require("http");
-let express = require("express");
-let socket = require("socket.io");
+let http    = require("http"),
+    express = require("express"),
+    socket  = require("socket.io"),
+    mysql   = require("mysql");
+
+const db = mysql.createPool({
+	connectionLimit: 100,
+	host: process.env.MYSQL_HOST,
+	user: process.env.MYSQL_U,
+	password: process.env.MYSQL_P,
+	database: process.env.MYSQL_CHATDB
+});
 
 let app = express();
 let server = http.createServer(app);
 let io = socket(server);
+
 const port = process.env.PORT || 3000;
 let hostname = "0.0.0.0";
 
@@ -59,6 +69,50 @@ class Message {
 
 let users = [];
 
+// function selectOne(table, attribute, key, value) {
+// 	db.query("SELECT ? FROM ? WHERE ? = ?", attribute, table, key, value, (err, rows) => {
+// 		if (err) throw err;
+
+// 		console.log(rows);
+// 	});
+// }
+
+function testQuery() {
+	db.query("SELECT contents FROM messages WHERE senderUsername = \"test\"", (err, rows) => {
+		if (err) throw err;
+
+		for (var i = 0; i < rows.length; i++) {
+			console.log(rows[i].contents);
+		}
+	});
+}
+
+// let messageQuery = {
+// 	id: null,
+// 	contents: message.message,
+// 	senderID: message.sender.id,
+// 	senderUsername: message.sender.username,
+// 	senderColorHSL: message.sender.color,
+// 	messageTimestamp: null,
+// 	server: "gamers only",
+// 	channel: "ebic gamers only"
+// };
+
+db.query("SELECT * FROM messages", (err, rows) => {
+	if (err) throw err;
+
+	for (var i = 0; i < rows.length; i++) {
+		io.emit("garbage test", rows[i]);
+		console.log(rows[i]);
+	}
+});
+
+// db.query("INSERT INTO messages SET ?", messageQuery, (err, res) => {
+// 	if (err) throw err;
+	
+// });
+
+
 io.on("connection", (socket_) => {
 	let user = new User(genUserID(6), "", genColorHsl(50, 80, 90));
 	users.push(user);
@@ -77,8 +131,33 @@ io.on("connection", (socket_) => {
 	});
 
 	socket_.on("chat.message", (message_) => {
+		
 		timestamp = genTimestamp();
 		let message = new Message(message_, user, timestamp);
+
+		// let messageQuery = {
+		// 	id: null,
+		// 	contents: message.message,
+		// 	senderID: message.sender.id,
+		// 	senderUsername: message.sender.username,
+		// 	senderColorHSL: message.sender.color,
+		// 	messageTimestamp: null,
+		// 	server: "gamers only",
+		// 	channel: "ebic gamers only"
+		// };
+
+		// db.query("INSERT INTO messages SET ?", messageQuery, (err, res) => {
+		// 	if (err) throw err;
+			
+		// 	db.query("SELECT * FROM messages", (err, rows) => {
+		// 		if (err) throw err;
+
+		// 		for (var i = 0; i < rows.length; i++) {
+		// 			io.emit("garbage test", rows[i]);
+		// 			console.log(rows[i]);
+		// 		}
+		// 	});
+		// });
 
 		io.emit("chat.message", message);
 		console.log(`\n[${message.timestamp}] ${message.sender.username}: ${message.message}`);

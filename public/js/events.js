@@ -9,6 +9,43 @@
 
 	let chatbox = document.querySelector("#chatbox");
 
+	function genListObjSQL(sender_) {
+		let messageJSON = {
+			container: {
+				html: document.createElement("li"),
+				class: "message"
+			}
+		};
+
+		for (var i = 1; i < arguments.length; i++) {
+			messageJSON[`domObj${i}`] = {
+				html: document.createElement(Object.values(arguments[i])[0]),
+				class: Object.values(arguments[i])[1],
+				contents: Object.values(arguments[i])[2]
+			}
+		}
+
+		const values = Object.values(messageJSON);
+		for (var x = 0; x < values.length; x++) {
+			if (x < values.length - 1) {
+				let y = x;
+				values[0].html.appendChild(values.slice(1)[y].html)
+			}
+
+			if (values[x].class !== "") {
+				values[x].html.classList.add(values[x].class);
+				
+				if (values[x].class === sender_.id) {
+					values[x].html.setAttribute("style", `color: ${sender_.color}; font-weight: 500;`);
+				}
+			}
+
+			if (values[x].contents != undefined) values[x].html.appendChild(document.createTextNode(values[x].contents));
+		}
+
+		return messageJSON.container.html;
+	}
+
 	function genListObj(sender_) {
 		let messageJSON = {
 			container: {
@@ -105,11 +142,13 @@
 
 		// document.querySelector("#messages-container").scrollTop = document.querySelector("#messages-container").scrollHeight;
 
-		console.log("scrollTop:", document.querySelector("#messages-container").scrollTop, "scrollHeight:", document.querySelector("#messages-container").scrollHeight);
-
-		console.log("SimpleBar.scrollTop:", document.querySelector("#messages-container").SimpleBar.getScrollElement().scrollTop, "SimpleBar.scrollHeight:", document.querySelector("#messages-container").SimpleBar.getScrollElement().scrollHeight);
-
 		console.log(`[${message_.timestamp}] ${message_.sender.username}: ${message_.message}`);
+	});
+
+	socket.on("garbage test", (data_) => {
+		console.log(data_.senderID);
+		messages.appendChild(genListObj({id: data_.senderID, username: data_.senderUsername, color: data_.senderColorHSL}, {html: "span", class: "message-timestamp", contents: `[${data_.messageTimestamp}] `}, {html: "span", class: data_.senderID, contents: data_.senderUsername}, {html: "span", class: "message-text", contents: `: ${data_.contents}`}));
+		document.querySelector("#messages-container").SimpleBar.getScrollElement().scrollTop = document.querySelector("#messages-container").SimpleBar.getScrollElement().scrollHeight;
 	});
 
 	socket.on("user.disconnect", (users_, user_) => {
