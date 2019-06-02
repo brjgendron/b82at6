@@ -98,14 +98,7 @@ function testQuery() {
 // 	channel: "ebic gamers only"
 // };
 
-db.query("SELECT * FROM messages", (err, rows) => {
-	if (err) throw err;
 
-	for (var i = 0; i < rows.length; i++) {
-		io.emit("garbage test", rows[i]);
-		console.log(rows[i]);
-	}
-});
 
 // db.query("INSERT INTO messages SET ?", messageQuery, (err, res) => {
 // 	if (err) throw err;
@@ -114,6 +107,15 @@ db.query("SELECT * FROM messages", (err, rows) => {
 
 
 io.on("connection", (socket_) => {
+	db.query("SELECT * FROM messages", (err, rows) => {
+		if (err) throw err;
+	
+		for (var i = 0; i < rows.length; i++) {
+			io.to(socket_.id).emit("garbage test", rows[i]);
+			console.log(rows[i]);
+		}
+	});
+	
 	let user = new User(genUserID(6), "", genColorHsl(50, 80, 90));
 	users.push(user);
 
