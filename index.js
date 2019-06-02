@@ -3,7 +3,7 @@ let http    = require("http"),
     socket  = require("socket.io"),
     mysql   = require("mysql");
 
-const db = mysql.createPool({
+const pool = mysql.createPool({
 	connectionLimit: 100,
 	host: process.env.MYSQL_HOST,
 	user: process.env.MYSQL_U,
@@ -69,53 +69,15 @@ class Message {
 
 let users = [];
 
-// function selectOne(table, attribute, key, value) {
-// 	db.query("SELECT ? FROM ? WHERE ? = ?", attribute, table, key, value, (err, rows) => {
-// 		if (err) throw err;
-
-// 		console.log(rows);
-// 	});
-// }
-
-function testQuery() {
-	db.query("SELECT contents FROM messages WHERE senderUsername = \"test\"", (err, rows) => {
-		if (err) throw err;
-
-		for (var i = 0; i < rows.length; i++) {
-			console.log(rows[i].contents);
-		}
-	});
-}
-
-// let messageQuery = {
-// 	id: null,
-// 	contents: message.message,
-// 	senderID: message.sender.id,
-// 	senderUsername: message.sender.username,
-// 	senderColorHSL: message.sender.color,
-// 	messageTimestamp: null,
-// 	server: "gamers only",
-// 	channel: "ebic gamers only"
-// };
-
-
-
-// db.query("INSERT INTO messages SET ?", messageQuery, (err, res) => {
-// 	if (err) throw err;
-	
-// });
-
-
 io.on("connection", (socket_) => {
-	db.query("SELECT * FROM messages", (err, rows) => {
+	pool.query("SELECT * FROM messages", (err, rows) => {
 		if (err) throw err;
-	
+		
 		for (var i = 0; i < rows.length; i++) {
 			io.to(socket_.id).emit("garbage test", rows[i]);
-			console.log(rows[i]);
 		}
 	});
-	
+
 	let user = new User(genUserID(6), "", genColorHsl(50, 80, 90));
 	users.push(user);
 
@@ -137,31 +99,28 @@ io.on("connection", (socket_) => {
 		timestamp = genTimestamp();
 		let message = new Message(message_, user, timestamp);
 
-		// let messageQuery = {
-		// 	id: null,
-		// 	contents: message.message,
-		// 	senderID: message.sender.id,
-		// 	senderUsername: message.sender.username,
-		// 	senderColorHSL: message.sender.color,
-		// 	messageTimestamp: null,
-		// 	server: "gamers only",
-		// 	channel: "ebic gamers only"
-		// };
+		let messageQuery = {
+			id: null,
+			contents: message.message,
+			senderID: message.sender.id,
+			senderUsername: message.sender.username,
+			senderColorHSL: message.sender.color,
+			messageTimestamp: null,
+			server: "temp-server",
+			channel: "temp-channel"
+		};
 
-		// db.query("INSERT INTO messages SET ?", messageQuery, (err, res) => {
-		// 	if (err) throw err;
-			
-		// 	db.query("SELECT * FROM messages", (err, rows) => {
-		// 		if (err) throw err;
+		pool.query("INSERT INTO messages SET ?", messageQuery, (err, res) => {
+			if (err) throw err;
+			pool.query("SELECT * FROM messages WHERE id = ?", res.insertId, (err, rows) => {
+				if (err) throw err;
 
-		// 		for (var i = 0; i < rows.length; i++) {
-		// 			io.emit("garbage test", rows[i]);
-		// 			console.log(rows[i]);
-		// 		}
-		// 	});
-		// });
+				io.emit("chat.message", rows[0]);
+				console.log(rows[0]);
+			});
+		});
 
-		io.emit("chat.message", message);
+		// io.emit("chat.message", message);
 		console.log(`\n[${message.timestamp}] ${message.sender.username}: ${message.message}`);
 	});
 
