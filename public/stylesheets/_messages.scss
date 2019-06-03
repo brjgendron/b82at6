@@ -1,20 +1,24 @@
 #messages-container {
 	// display: inline-block;
 	// position: static;
-	margin: 0 auto;
+	// margin: 0 auto;
 	padding-left: 25px;
 	padding-right: 25px;
-	width: calc(100% - 250px);
-	height: calc(100% - 50px);
-	float: left;
-	clear: left;
+	// width: 100%;
+	// width: calc(100% - 500px);
+	height: calc(100% - #{$chatbox-height});
+	// padding-bottom: $chatbox-height;
+	// float: left;
+	// clear: left;
 	// overflow-y: scroll;
+
+	flex: 1;
 
 	background: inherit;
 
 	#messages {
 		list-style-type: none;
-		
+
 		li {
 			word-break: break-all;
 			padding-top: 10px;

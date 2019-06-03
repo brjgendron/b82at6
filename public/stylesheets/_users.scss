@@ -1,8 +1,10 @@
 #users-container {
 	position: relative;
-	width: 250px;
-	height: calc(100% - 50px);
+	// width: 250px;
+	height: 100%;
 	background: $dark-theme-bg;
+
+	flex: 0 $side-panel-width;
 
 	padding-left: 25px;
 	padding-right: 25px;
@@ -10,8 +12,8 @@
 
 	// overflow-y: scroll;
 	
-	float: right;
-	clear: right;
+	// float: right;
+	// clear: right;
 
 	#users {
 		list-style-type: none;
@@ -30,7 +32,7 @@
 
 	#change-username {
 		position: fixed;
-		bottom: 50px;
+		bottom: 0;
 		right: 0;
 		width: 250px;
 		height: 50px;

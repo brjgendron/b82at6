@@ -9,6 +9,33 @@
 
 	let chatbox = document.querySelector("#chatbox");
 
+	let serverName = document.getElementsByClassName("server-name");
+	// let serverNameIcons = document.getElementsByClassName("expand-collapse-icon");
+	let expandIcons = document.getElementsByClassName("expand-icon");
+	let collapseIcons = document.getElementsByClassName("collapse-icon");
+	for (var i = 0; i < serverName.length; i++) {
+		let currentIndex = serverName[i];
+		serverName[i].addEventListener("click", (event_) => {
+			if (currentIndex.classList.contains("expanded")) {
+				currentIndex.classList.add("collapsed");
+				currentIndex.classList.remove("expanded");
+
+				currentIndex.children[0].classList.add("hidden");
+				currentIndex.children[1].classList.remove("hidden");
+
+				currentIndex.nextElementSibling.classList.add("hidden");
+			} else if (currentIndex.classList.contains("collapsed")) {
+				currentIndex.classList.add("expanded");
+				currentIndex.classList.remove("collapsed");
+
+				currentIndex.children[0].classList.remove("hidden");
+				currentIndex.children[1].classList.add("hidden");
+
+				currentIndex.nextElementSibling.classList.remove("hidden");
+			}
+		});
+	}
+
 		function genListObj(sender_) {
 		let messageJSON = {
 			container: {

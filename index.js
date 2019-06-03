@@ -21,7 +21,7 @@ let hostname = "0.0.0.0";
 app.use(express.static(`${__dirname}/public`));
 
 app.get("/", (req, res) => {
-	res.sendFile(`${__dirname}/public/index.html`);
+	res.sendFile(`${__dirname}/public/index.min.html`);
 });
 
 
@@ -73,7 +73,11 @@ io.on("connection", (socket_) => {
 	pool.query("SELECT * FROM messages", (err, rows) => {
 		if (err) throw err;
 		
-		for (var i = 0; i < rows.length; i++) {
+		let offset = rows.length - 50;
+		console.log("rows.length:", rows.length, "\noffset:", offset);
+
+		for (var i = offset; i < rows.length; i++) {
+			console.log(i);
 			io.to(socket_.id).emit("garbage test", rows[i]);
 		}
 	});

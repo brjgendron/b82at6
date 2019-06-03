@@ -4,7 +4,7 @@
 		<title>Chat.js</title>
 		<!-- local resources -->
 		<script src="/socket.io/socket.io.js"></script>
-		<link rel="stylesheet" href="stylesheets/master.css">
+		<link rel="stylesheet" href="stylesheets/master.min.css">
 
 		<!-- external resources -->
 		<link rel="stylesheet" href="https://unpkg.com/simplebar@latest/dist/simplebar.css" />
@@ -12,6 +12,31 @@
 	</head>
 
 	<body>
+		<div id="server-channels-container" data-simplebar>
+			<ul class="servers">
+				<li class="server">
+					<span class="server-name expanded">server-1<img src="icons/collapse.svg" alt="" class="expand-collapse-icon collapse-icon"><img src="icons/expand.svg" alt="" class="expand-collapse-icon expand-icon hidden"></span>
+					<ul class="channels">
+						<li><span class="text-channel-icon">#</span>channel-1</li>
+						<li><span class="text-channel-icon">#</span>channel-2</li>
+						<li><span class="text-channel-icon">#</span>channel-3</li>
+						<li><span class="text-channel-icon">#</span>channel-4</li>
+						<li><span class="text-channel-icon">#</span>channel-5</li>
+					</ul>
+				</li>
+				<li class="server">
+					<span class="server-name expanded">server-2<img src="icons/collapse.svg" alt="" class="expand-collapse-icon collapse-icon"><img src="icons/expand.svg" alt="" class="expand-collapse-icon expand-icon hidden"></span>
+					<ul class="channels">
+						<li><span class="text-channel-icon">#</span>channel-1</li>
+						<li><span class="text-channel-icon">#</span>channel-2</li>
+						<li><span class="text-channel-icon">#</span>channel-3</li>
+						<li><span class="text-channel-icon">#</span>channel-4</li>
+						<li><span class="text-channel-icon">#</span>channel-5</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		
 		<div id="messages-container" data-simplebar>
 			<ul id="messages"></ul>
 		</div>
@@ -29,6 +54,6 @@
 			</form>
 		</div>
 		
-		<script src="js/events.js"></script>
+		<script src="js/events.min.js"></script>
 	</body>
 </html>

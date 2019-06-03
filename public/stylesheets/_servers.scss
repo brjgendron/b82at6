@@ -1,0 +1,65 @@
+#server-channels-container {
+	position: relative;
+	height: 100%;
+	background: $dark-theme-bg;
+
+	flex: 0 $side-panel-width;
+
+	padding: 0px 25px 50px 25px;
+
+	.servers {
+		* {
+			cursor: pointer;
+		}
+
+		font-weight: 500;
+		.server {
+			border-bottom: 1px solid $dark-theme-placeholder-text;
+			
+			padding-top: 10px;
+			> * {
+				padding-bottom: 5px;
+			}
+
+			.channels {
+				> * {
+					padding-top: 5px;
+					padding-bottom: 5px;
+					
+				}
+
+				li:hover {
+					background: $dark-theme-placeholder-text;
+				}
+				li {
+					// :hover {
+					// }
+					// padding-bottom: 10px;
+					span {
+						// width: 100%;
+						padding-right: 10px;
+						font-weight: 200;
+						color: $dark-theme-inactive-text;
+					}
+				}
+			}
+			
+			.server-name {
+				width: 100%;
+				// line-height: 100%;
+				img {
+					// line-height: 100%;
+					// height: 100%;
+					margin-top: 6px;
+					float: right;
+					clear: right;
+					// vertical-align: 3px;
+				}
+			}
+		}
+
+		span {
+			display: inline-block;
+		}
+	}
+}

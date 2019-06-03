@@ -16,7 +16,9 @@ html, body {
 }
 
 body {
-	// overflow-x: hidden;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
 	background: $dark-theme-bg;
 
 	a {
@@ -28,4 +30,8 @@ body {
 	ul {
 		list-style-type: none;
 	}
+}
+
+.hidden {
+	display: none;
 }
