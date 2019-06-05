@@ -2,7 +2,7 @@
 	// display: inline-block;
 	// position: static;
 	// margin: 0 auto;
-	padding-left: 25px;
+	padding-left: 50px;
 	padding-right: 25px;
 	// width: 100%;
 	// width: calc(100% - 500px);
@@ -20,7 +20,8 @@
 		list-style-type: none;
 
 		li {
-			word-break: break-all;
+			overflow-wrap: anywhere;
+			// word-break: break-all;
 			padding-top: 10px;
 			padding-bottom: 10px;
 			border-bottom: 1px solid $dark-theme-placeholder-text;

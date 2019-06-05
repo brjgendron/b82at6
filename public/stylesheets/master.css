@@ -46,7 +46,7 @@ body ul {
 }
 
 #messages-container {
-  padding-left: 25px;
+  padding-left: 50px;
   padding-right: 25px;
   height: calc(100% - 50px);
   -webkit-box-flex: 1;
@@ -60,7 +60,7 @@ body ul {
 }
 
 #messages-container #messages li {
-  word-break: break-all;
+  overflow-wrap: anywhere;
   padding-top: 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid #4d4d4d;

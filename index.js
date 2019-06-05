@@ -1,7 +1,11 @@
 let http    = require("http"),
     express = require("express"),
     socket  = require("socket.io"),
-    mysql   = require("mysql");
+		mysql   = require("mysql"),
+		bodyparser = require("body-parser"),
+		{ check } = require("express-validator/check"),
+		sanitizeBody = require("express-validator/filter"),
+		bcrypt = require("bcrypt");
 
 const pool = mysql.createPool({
 	connectionLimit: 100,
@@ -19,11 +23,53 @@ const port = process.env.PORT || 3000;
 let hostname = "0.0.0.0";
 
 app.use(express.static(`${__dirname}/public`));
+app.use(bodyparser.urlencoded({extended:true}));
+
 
 app.get("/", (req, res) => {
 	res.sendFile(`${__dirname}/public/index.min.html`);
 });
 
+app.get("/form", (req, res) => {
+	res.sendFile(`${__dirname}/public/form.html`);
+});
+
+app.post("/login", [check("user_name").isLength({min : 5, max: 25}), check("pass_word").isLength({min : 16, max : 128})], (req, res) => {
+	const saltRounds = 31;
+	const username = req.body.user_name;
+	const plainTextPassword = req.body.pass_word;
+
+	bcrypt.hash(plainTextPassword, saltRounds, (err, hash) => {
+		if (err) throw err;
+		console.log(`username: ${username}\npassword: ${plainTextPassword}\nhashed password: ${hash}`);
+
+		// let userQuery = {
+		// 	id: null,
+		// 	username: username,
+		// 	password: hash
+		// };
+
+		// let inserts = ["users", userQuery];
+		// pool.query("INSERT INTO ?? SET ?", inserts, (err, res) => {
+		// 	if (err) throw err;
+		// 	console.log(res);
+
+		// 	pool.query("SELECT * FROM users", (err, rows) => {
+		// 		console.log(rows);
+		// 	});
+		// });
+
+		bcrypt.compare(plainTextPassword, hash, (err, res) => {
+			console.log(res);
+		});
+	});
+
+	res.send("post finished");
+});
+
+
+// app.get("/login", (req, res) => {
+// });
 
 function genUserID(length) {
 	let result = "";
@@ -123,7 +169,9 @@ io.on("connection", (socket_) => {
 			channel: "temp-channel"
 		};
 
-		pool.query("INSERT INTO messages SET ?", messageQuery, (err, res) => {
+		let table = "messages";
+		let inserts = ["messages", messageQuery];
+		pool.query("INSERT INTO ?? SET ?", inserts, (err, res) => {
 			if (err) throw err;
 			pool.query("SELECT * FROM messages WHERE id = ?", res.insertId, (err, rows) => {
 				if (err) throw err;

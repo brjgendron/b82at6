@@ -1,0 +1,145 @@
+@import url('https://rsms.me/inter/inter.css');
+html { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 12pt; }
+
+* {
+	box-sizing: border-box;
+
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
+	width: 100vw;
+	height: 100vh;
+}
+
+body {
+	display: flex;
+
+	align-items: center;
+	justify-content: center;
+
+	background: hsl(0, 0%, 20%);
+	color: hsl(0, 0%, 80%);
+}
+
+.hidden {
+	display: none;
+}
+
+div {
+	width: 400px;
+	height: 400px;
+
+	form {
+		> * {
+			margin-top: 10px;
+		}
+
+		.input-container {
+			position: relative;
+			width: 350px;
+			height: 50px;
+			padding: 0;
+			border: none;
+
+			button {
+				cursor: pointer;
+				width: 150px;
+				height: 100%;
+				text-align: center;
+				
+				border: 1px solid hsl(0, 0%, 60%);
+				border-radius: 25px;
+				background-color: hsl(0, 0%, 20%);
+				color: hsl(0, 0%, 80%);
+				font-family: 'Inter', sans-serif;
+				font-weight: 300;
+				font-size: 12pt;
+			}
+
+			input {
+				width: 100%;
+				height: 100%;
+				padding-left: 55px;
+				padding-right: 40px;
+
+				border: 1px solid hsl(0, 0%, 60%);
+				border-radius: 25px;
+				background-color: hsl(0, 0%, 20%);
+				color: hsl(0, 0%, 80%);
+				font-family: 'Inter', sans-serif;
+				font-weight: 300;
+				font-size: 12pt;
+
+				&.username-input {
+					background-image: url(../icons/user.svg);
+					background-repeat: no-repeat;
+					background-position: 10px center;
+
+					&.valid {
+						border: 1px solid hsl(144, 72%, 57%);
+
+						background-image: url(../icons/user.svg), url(../icons/valid.svg);
+						background-repeat: no-repeat;
+						background-position: 10px center, calc(100% - 15px) center;
+					}
+
+					&.invalid {
+						border: 1px solid hsl(0, 72%, 57%);
+
+						background-image: url(../icons/user.svg), url(../icons/invalid.svg);
+						background-repeat: no-repeat;
+						background-position: 10px center, calc(100% - 15px) center;
+					}
+				}
+
+				&.password-input {
+					width: 300px;
+
+					background-image: url(../icons/password.svg);
+					background-repeat: no-repeat;
+					background-position: 10px center;
+
+					&.valid {
+						border: 1px solid hsl(144, 72%, 57%);
+
+						background-image: url(../icons/password.svg), url(../icons/valid.svg);
+						background-repeat: no-repeat;
+						background-position: 10px center, calc(100% - 15px) center;
+					}
+
+					&.invalid {
+						border: 1px solid hsl(0, 72%, 57%);
+
+						background-image: url(../icons/password.svg), url(../icons/invalid.svg);
+						background-repeat: no-repeat;
+						background-position: 10px center, calc(100% - 15px) center;
+					}
+				}
+			}
+
+			img.visible {
+				position: absolute;
+				top: calc((50px / 2) - (24px / 2));
+				right: calc((50px / 2) - (24px / 2));
+				cursor: pointer;
+			}
+
+			span {
+				margin: 0;
+				padding: 0;
+				display: block;
+				position: absolute;
+				top: calc((50px / 2) - (40% / 2));
+				border-radius: 0;
+				left: 44px;
+				width: 0px;
+				height: 40%;
+				border: 0;
+				border-left: 1px solid hsl(0, 0%, 40%);
+			}
+		}
+	}
+}
+
