@@ -35,7 +35,7 @@ app.get("/form", (req, res) => {
 });
 
 app.post("/login", [check("user_name").isLength({min : 5, max: 25}), check("pass_word").isLength({min : 16, max : 128})], (req, res) => {
-	const saltRounds = 31;
+	const saltRounds = 16;
 	const username = req.body.user_name;
 	const plainTextPassword = req.body.pass_word;
 
