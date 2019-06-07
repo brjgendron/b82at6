@@ -3,8 +3,8 @@ let http    = require("http"),
     socket  = require("socket.io"),
 		mysql   = require("mysql"),
 		bodyparser = require("body-parser"),
-		{ check } = require("express-validator/check"),
-		sanitizeBody = require("express-validator/filter"),
+		{ check, validationResult } = require("express-validator/check"),
+		// sanitizeBody = require("express-validator/filter"),
 		bcrypt = require("bcrypt");
 
 const pool = mysql.createPool({
@@ -27,44 +27,64 @@ app.use(bodyparser.urlencoded({extended:true}));
 
 
 app.get("/", (req, res) => {
-	res.sendFile(`${__dirname}/public/index.min.html`);
+	res.sendFile(`${__dirname}/public/html/index/index.min.html`);
 });
 
-app.get("/form", (req, res) => {
-	res.sendFile(`${__dirname}/public/form.html`);
+app.get("/signup", (req, res) => {
+	res.sendFile(`${__dirname}/public/html/signup/signup.html`);
 });
 
-app.post("/login", [check("user_name").isLength({min : 5, max: 25}), check("pass_word").isLength({min : 16, max : 128})], (req, res) => {
+app.post("/processform", [check("usernamefield").isLength({ min: 5, max: 25 }), check("passwordfield").isLength({ min: 8, max: 128 })], (req, res) => {
+
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+
+	let UserSet = {
+		id: null,
+		username: req.body.usernamefield,
+		password: req.body.passwordfield
+	}
+
 	const saltRounds = 16;
-	const username = req.body.user_name;
-	const plainTextPassword = req.body.pass_word;
+	// const username = req.body.user_name;
+	// const plainTextPassword = req.body.pass_word;
 
-	bcrypt.hash(plainTextPassword, saltRounds, (err, hash) => {
+	bcrypt.hash(UserSet.password, saltRounds, (err, hash) => {
 		if (err) throw err;
-		console.log(`username: ${username}\npassword: ${plainTextPassword}\nhashed password: ${hash}`);
 
-		// let userQuery = {
-		// 	id: null,
-		// 	username: username,
-		// 	password: hash
-		// };
+		UserSet.password = hash;
+		let inserts = ["users", UserSet];
 
-		// let inserts = ["users", userQuery];
-		// pool.query("INSERT INTO ?? SET ?", inserts, (err, res) => {
-		// 	if (err) throw err;
-		// 	console.log(res);
+		pool.query("SELECT username FROM users", (err, rows) => {
+			let exists = false;
+			for (var i = 0; i < rows.length; i++) {
+				if (UserSet.username == rows[i].username) {
+					exists = true;
+					// return;
+				} else {
+					exists = false;
+				}
 
-		// 	pool.query("SELECT * FROM users", (err, rows) => {
-		// 		console.log(rows);
-		// 	});
-		// });
-
-		bcrypt.compare(plainTextPassword, hash, (err, res) => {
-			console.log(res);
+			}
+			
+			console.log(exists);
+			if (!exists) {
+				pool.query("INSERT INTO ?? SET ?", inserts, (err, res) => {
+					if (err) throw err;
+					console.log(res);
+				});
+			} else {
+				console.log("fuck you bitch");
+			}
 		});
+
+
+		// bcrypt.compare(plainTextPassword, hash, (err, res) => {
+		// 	console.log(res);
+		// });
 	});
 
-	res.send("post finished");
+	res.send("i need a message here");
 });
 
 
@@ -205,6 +225,43 @@ io.on("connection", (socket_) => {
 		deeznuts_ = "deeznuts.ogg";
 		io.emit("deeznuts", deeznuts_);
 	}); 
+
+	socket_.on("username request", (username_) => {
+		let querySet = ["users"];
+		var match = false;
+		pool.query("SELECT username FROM ??", querySet, (err, rows) => {
+			if (err) throw err;
+
+			for (var i = 0; i < rows.length; i++) {
+				console.log(rows[i]);
+				if (username_ == rows[i].username) {
+					match = true;
+					io.emit("matched username", match);
+					console.log(match);
+				} else {
+					match = false;
+					io.emit("matched username", match);
+					console.log(match);
+				}
+			}
+
+			// if (rows[0].username == username_) {
+			// 	match = true;
+			// 	socket_.emit("matched username", match);
+			// 	console.log("usernames match");
+			// } else {
+			// 	match = false;
+			// 	socket_.emit("matched username", match);
+			// 	console.log("usernames do not match");
+			// }
+		});
+		// let inserts = ["users", "username", username_];
+		// pool.query("SELECT * FROM ?? WHERE ? = ?", inserts, (err, rows) => {
+		// 	console.log(rows);
+		// });
+		
+		// console.log(username_);
+	});
 });
 
 server.listen(port, hostname, () => {

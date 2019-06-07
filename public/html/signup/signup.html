@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title>Sign In or Create an Account</title>
+		
+		<script src="/socket.io/socket.io.js"></script>
+		<link rel="stylesheet" href="../../stylesheets/signup/signup.css">
+	</head>
+	<body>
+		<div>
+			<form action="/processform" method="post">
+				<div class="input-container username-container">
+					<input data-lpignore="true" type="text" name="usernamefield" placeholder="Username" class="username-input"
+					><span class="separator"></span><span class="input-length username-length"></span>
+				</div>
+				<div class="input-container password-container">
+					<input data-lpignore="true" type="password" name="passwordfield" placeholder="Password" class="password-input"
+					><span class="separator"></span><span class="input-length password-length"></span>
+					<img src="icons/visible.svg" alt="" class="visibility-toggle hidden"><img src="icons/hidden.svg" alt="" class="visibility-toggle visible">
+				</div>
+				<div class="input-container button-container">
+					<button type="submit" class="submit-button not-ready" disabled>Create Account</button>
+				</div>
+			</form>
+		</div>
+
+		<script src="../../js/signup.js"></script>
+	</body>
+</html>

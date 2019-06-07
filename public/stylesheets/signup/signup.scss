@@ -38,28 +38,46 @@ div {
 
 		.input-container {
 			position: relative;
-			width: 350px;
+			width: 400px;
 			height: 50px;
 			padding: 0;
 			border: none;
 
 			button {
+				float: right;
+				clear: right;
+				margin-right: 50px;
+
 				cursor: pointer;
 				width: 150px;
 				height: 100%;
 				text-align: center;
 				
-				border: 1px solid hsl(0, 0%, 60%);
+				border: none;
 				border-radius: 25px;
 				background-color: hsl(0, 0%, 20%);
 				color: hsl(0, 0%, 80%);
 				font-family: 'Inter', sans-serif;
 				font-weight: 300;
 				font-size: 12pt;
+
+				&[disabled] {
+					cursor: not-allowed;
+					background: white;
+					color: hsl(0, 0%, 20);
+					// border: none;
+				}
+
+				&:not([disabled]) {
+					background: linear-gradient(180deg, rgb(23, 255, 158) 0%, rgb(21, 177, 55) 100%);
+					color: white;
+
+					text-shadow: 0px 5px 15px black;
+				}
 			}
 
 			input {
-				width: 100%;
+				width: 350px;
 				height: 100%;
 				padding-left: 55px;
 				padding-right: 40px;
@@ -73,14 +91,15 @@ div {
 				font-size: 12pt;
 
 				&.username-input {
-					background-image: url(../icons/user.svg);
+					padding-right: 95px;
+					background-image: url(../../icons/user.svg);
 					background-repeat: no-repeat;
 					background-position: 10px center;
 
 					&.valid {
 						border: 1px solid hsl(144, 72%, 57%);
 
-						background-image: url(../icons/user.svg), url(../icons/valid.svg);
+						background-image: url(../../icons/user.svg), url(../../icons/valid.svg);
 						background-repeat: no-repeat;
 						background-position: 10px center, calc(100% - 15px) center;
 					}
@@ -88,23 +107,25 @@ div {
 					&.invalid {
 						border: 1px solid hsl(0, 72%, 57%);
 
-						background-image: url(../icons/user.svg), url(../icons/invalid.svg);
+						background-image: url(../../icons/user.svg), url(../../icons/invalid.svg);
 						background-repeat: no-repeat;
 						background-position: 10px center, calc(100% - 15px) center;
 					}
 				}
 
 				&.password-input {
-					width: 300px;
+					width: 350px;
 
-					background-image: url(../icons/password.svg);
+					padding-right: 75px;
+
+					background-image: url(../../icons/password.svg);
 					background-repeat: no-repeat;
 					background-position: 10px center;
 
 					&.valid {
 						border: 1px solid hsl(144, 72%, 57%);
 
-						background-image: url(../icons/password.svg), url(../icons/valid.svg);
+						background-image: url(../../icons/password.svg), url(../../icons/valid.svg);
 						background-repeat: no-repeat;
 						background-position: 10px center, calc(100% - 15px) center;
 					}
@@ -112,7 +133,7 @@ div {
 					&.invalid {
 						border: 1px solid hsl(0, 72%, 57%);
 
-						background-image: url(../icons/password.svg), url(../icons/invalid.svg);
+						background-image: url(../../icons/password.svg), url(../../icons/invalid.svg);
 						background-repeat: no-repeat;
 						background-position: 10px center, calc(100% - 15px) center;
 					}
@@ -126,7 +147,26 @@ div {
 				cursor: pointer;
 			}
 
-			span {
+			.input-length {
+				position: absolute;
+				top: calc((50px / 2) - (20px / 2));
+				right: 90px;
+
+
+				&.valid {
+					color: hsl(144, 72%, 57%);
+				}
+
+				&.invalid {
+					color: hsl(0, 72%, 57%);
+				}
+			}
+
+			.username-length {
+				right: 90px;
+			}
+
+			.separator {
 				margin: 0;
 				padding: 0;
 				display: block;
