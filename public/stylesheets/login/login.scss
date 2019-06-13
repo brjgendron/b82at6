@@ -1,0 +1,185 @@
+@import url('https://rsms.me/inter/inter.css');
+html { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 12pt; }
+
+* {
+	box-sizing: border-box;
+
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
+	width: 100vw;
+	height: 100vh;
+}
+
+body {
+	display: flex;
+
+	align-items: center;
+	justify-content: center;
+
+	background: hsl(0, 0%, 20%);
+	color: hsl(0, 0%, 80%);
+}
+
+.hidden {
+	display: none;
+}
+
+div {
+	width: 400px;
+	height: 400px;
+
+	form {
+		> * {
+			margin-top: 10px;
+		}
+
+		.input-container {
+			position: relative;
+			width: 400px;
+			height: 50px;
+			padding: 0;
+			border: none;
+
+			button {
+				float: right;
+				clear: right;
+				margin-right: 50px;
+
+				cursor: pointer;
+				width: 150px;
+				height: 100%;
+				text-align: center;
+				
+				border: none;
+				border-radius: 25px;
+				background-color: hsl(0, 0%, 20%);
+				color: hsl(0, 0%, 80%);
+				font-family: 'Inter', sans-serif;
+				font-weight: 300;
+				font-size: 12pt;
+
+				&[disabled] {
+					cursor: not-allowed;
+					background: white;
+					color: hsl(0, 0%, 20);
+					// border: none;
+				}
+
+				&:not([disabled]) {
+					background: linear-gradient(180deg, rgb(23, 255, 158) 0%, rgb(21, 177, 55) 100%);
+					color: white;
+
+					text-shadow: 0px 5px 15px black;
+				}
+			}
+
+			input {
+				width: 350px;
+				height: 100%;
+				padding-left: 55px;
+				padding-right: 40px;
+
+				border: 1px solid hsl(0, 0%, 60%);
+				border-radius: 25px;
+				background-color: hsl(0, 0%, 20%);
+				color: hsl(0, 0%, 80%);
+				font-family: 'Inter', sans-serif;
+				font-weight: 300;
+				font-size: 12pt;
+
+				&.username-input {
+					padding-right: 95px;
+					background-image: url(../../icons/user.svg);
+					background-repeat: no-repeat;
+					background-position: 10px center;
+
+					&.valid {
+						border: 1px solid hsl(144, 72%, 57%);
+
+						background-image: url(../../icons/user.svg), url(../../icons/valid.svg);
+						background-repeat: no-repeat;
+						background-position: 10px center, calc(100% - 15px) center;
+					}
+
+					&.invalid {
+						border: 1px solid hsl(0, 72%, 57%);
+
+						background-image: url(../../icons/user.svg), url(../../icons/invalid.svg);
+						background-repeat: no-repeat;
+						background-position: 10px center, calc(100% - 15px) center;
+					}
+				}
+
+				&.password-input {
+					width: 350px;
+
+					padding-right: 75px;
+
+					background-image: url(../../icons/password.svg);
+					background-repeat: no-repeat;
+					background-position: 10px center;
+
+					&.valid {
+						border: 1px solid hsl(144, 72%, 57%);
+
+						background-image: url(../../icons/password.svg), url(../../icons/valid.svg);
+						background-repeat: no-repeat;
+						background-position: 10px center, calc(100% - 15px) center;
+					}
+
+					&.invalid {
+						border: 1px solid hsl(0, 72%, 57%);
+
+						background-image: url(../../icons/password.svg), url(../../icons/invalid.svg);
+						background-repeat: no-repeat;
+						background-position: 10px center, calc(100% - 15px) center;
+					}
+				}
+			}
+
+			img.visible {
+				position: absolute;
+				top: calc((50px / 2) - (24px / 2));
+				right: calc((50px / 2) - (24px / 2));
+				cursor: pointer;
+			}
+
+			.input-length {
+				position: absolute;
+				top: calc((50px / 2) - (20px / 2));
+				right: 90px;
+
+
+				&.valid {
+					color: hsl(144, 72%, 57%);
+				}
+
+				&.invalid {
+					color: hsl(0, 72%, 57%);
+				}
+			}
+
+			.username-length {
+				right: 90px;
+			}
+
+			.separator {
+				margin: 0;
+				padding: 0;
+				display: block;
+				position: absolute;
+				top: calc((50px / 2) - (40% / 2));
+				border-radius: 0;
+				left: 44px;
+				width: 0px;
+				height: 40%;
+				border: 0;
+				border-left: 1px solid hsl(0, 0%, 40%);
+			}
+		}
+	}
+}
+
