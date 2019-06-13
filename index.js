@@ -192,7 +192,7 @@ app.post("/processlogin", [check("usernamefield").isLength({ min: 5, max: 25 }),
 		if (success) {
 			bcrypt.hash(req.body.usernamefield, 10, (err, hash) => {
 				if (err) throw err;
-				res.cookie("user", { x: req.body.usernamefield, y: hash });
+				res.cookie("user", { x: req.body.usernamefield, y: hash }, { httpOnly: true, secure: true });
 				res.redirect("/");
 			});
 			
@@ -212,7 +212,7 @@ app.post("/processsignup", [check("usernamefield").isLength({ min: 5, max: 25 })
 		} else {
 			bcrypt.hash(req.body.usernamefield, 10, (err, hash) => {
 				if (err) throw err;
-				res.cookie("user", { x: req.body.usernamefield, y: hash });
+				res.cookie("user", { x: req.body.usernamefield, y: hash }, { httpOnly: true, secure: true });
 				res.redirect("/");
 			});
 		}
