@@ -7,4 +7,4 @@ the frontend uses vanilla HTML5, JavaScript, and [`scss`](https://github.com/sas
 Files are minified for serving with [`html-minifier`](https://github.com/kangax/html-minifier), [`clean-css`](https://github.com/jakubpawlowicz/clean-css), and [`uglify-js`](https://github.com/mishoo/UglifyJS2).
 i'm also using the [`simplebar`](https://github.com/Grsmto/simplebar) JavaScript library for prettier scrollbars.
 
-#the app is currently down because i'm a fucking monkey
+# the app is currently down because i'm a fucking monkey
