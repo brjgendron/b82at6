@@ -119,44 +119,46 @@ app.get("/chat", (req, res) => {
 		pool.query(query, req.cookies.user.x, (err, rows) => {
 			if (err) throw err;
 
-			let userSet = {
-				id: rows[0].id,
-				username: rows[0].username,
-				color: rows[0].color,
-				globalAdmin: rows[0].globalAdmin
-			};
-
-			connectedUsers.push(userSet);
-
-			console.log(userSet);
-			io.emit("new connection", userSet, connectedUsers);
-
-			socket.on("message", (message_) => {
-				let messageSet = {
-					id: null,
-					contents: message_,
-					senderID: userSet.id,
-					senderUsername: userSet.username,
-					senderUsernameWithID: `${userSet.username}-${userSet.id}`,
-					senderColorHSL: userSet.color,
-					messageTimestamp: null,
-					server: "temp-server",
-					channel: "temp-channel"
+			if (rows.length !== 0) {
+				let userSet = {
+					id: rows[0].id,
+					username: rows[0].username,
+					color: rows[0].color,
+					globalAdmin: rows[0].globalAdmin
 				};
 				
-				let query = "INSERT INTO ?? SET ?";
-				let insert = ["messages", messageSet];
-				pool.query(query, insert, (err, res) => {
-					if (err) throw err;
-
-					pool.query("SELECT * FROM messages WHERE id = ?", res.insertId, (err, rows) => {
+				connectedUsers.push(userSet);
+				
+				io.emit("new connection", userSet, connectedUsers);
+				console.log(userSet);
+				
+				socket.on("message", (message_) => {
+					let messageSet = {
+						id: null,
+						contents: message_,
+						senderID: userSet.id,
+						senderUsername: userSet.username,
+						senderUsernameWithID: `${userSet.username}-${userSet.id}`,
+						senderColorHSL: userSet.color,
+						messageTimestamp: null,
+						server: "temp-server",
+						channel: "temp-channel"
+					};
+					
+					let query = "INSERT INTO ?? SET ?";
+					let insert = ["messages", messageSet];
+					pool.query(query, insert, (err, res) => {
 						if (err) throw err;
-		
-						console.log(rows[0]);
-						io.emit("message", rows[0]);
+	
+						pool.query("SELECT * FROM messages WHERE id = ?", res.insertId, (err, rows) => {
+							if (err) throw err;
+			
+							console.log(rows[0]);
+							io.emit("message", rows[0]);
+						});
 					});
 				});
-			});
+			}
 		});
 	});
 
