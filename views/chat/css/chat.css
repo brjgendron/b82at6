@@ -1,0 +1,126 @@
+@import url("https://rsms.me/inter/inter.css");
+html {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 12pt;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: #cccccc;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+}
+
+body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  background: #333333;
+}
+
+body a {
+  text-decoration: none;
+  font-weight: 500;
+  color: #50A9FC;
+}
+
+body ul {
+  list-style-type: none;
+}
+
+.hidden {
+  display: none;
+}
+
+.messages-container {
+  height: calc(100% - 4em);
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  padding-left: 2em;
+  padding-right: 2em;
+  background: inherit;
+}
+
+.messages-container .messages li {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid #4d4d4d;
+}
+
+.messages-container .messages li .message-timestamp {
+  color: #999999;
+}
+
+.chatbox-container {
+  position: fixed;
+  left: 250px;
+  bottom: 0;
+  width: calc(100% - 500px);
+  height: 4em;
+}
+
+.chatbox-container .compose-message {
+  width: 100%;
+  height: 100%;
+}
+
+.chatbox-container .compose-message * {
+  border: 0;
+  height: 100%;
+  font-family: Inter;
+  font-size: 12pt;
+  font-weight: 300;
+  color: #cccccc;
+}
+
+.chatbox-container .compose-message .chatbox {
+  width: 100%;
+  padding: 0 2em;
+  background: #404040;
+}
+
+.chatbox-container .compose-message .chatbox ::-webkit-input-placeholder {
+  color: #4d4d4d;
+}
+
+.chatbox-container .compose-message .chatbox :-ms-input-placeholder {
+  color: #4d4d4d;
+}
+
+.chatbox-container .compose-message .chatbox ::-ms-input-placeholder {
+  color: #4d4d4d;
+}
+
+.chatbox-container .compose-message .chatbox ::placeholder {
+  color: #4d4d4d;
+}
+
+.side-panel {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 250px;
+          flex: 0 250px;
+  height: 100%;
+  padding: 0 2em;
+  background: #333333;
+}
+
+.users-container .users li {
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

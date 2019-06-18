@@ -1,0 +1,23 @@
+// sizing + positioning
+$font-size-global: 12pt;
+$chatbox-height: 4em;
+$side-panel-width: 250px;
+$side-padding: 2em;
+
+// general
+$font-stack: Inter, sans-serif;
+$link-color: #50A9FC;
+
+// light theme
+$lt-text: #333333;
+$lt-bg-text: #444444;
+$lt-background: #F7F7F7;
+
+// dark theme
+$dtheme-background: hsl(0, 0%, 20%);
+$dtheme-chatbox-bg: hsl(0, 0%, 25%);
+$dtheme-text-fade0: hsl(0, 0%, 80%);
+$dtheme-text-fade1: hsl(0, 0%, 60%);
+$dtheme-text-fade2: hsl(0, 0%, 60%);
+$dtheme-placeholder-text: hsl(0, 0%, 30%);
+$dtheme-inactive-text: hsl(0, 0%, 60%)

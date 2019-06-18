@@ -1,0 +1,16 @@
+.side-panel {
+	flex: 0 $side-panel-width;
+	height: 100%;
+
+	padding: 0 $side-padding;
+
+	background: $dtheme-background;
+}
+
+.users-container {
+	.users li {
+		overflow-x: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+}

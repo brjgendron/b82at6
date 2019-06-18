@@ -1,0 +1,14 @@
+html
+	head
+		title="chat.js"
+		//- local resources
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js")
+		link(rel="stylesheet", href="/chat/css/chat.css")
+
+		//- external resources
+		link(rel="stylesheet", href="https://unpkg.com/simplebar@latest/dist/simplebar.min.css")
+		script(src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js")
+	body
+		include containers
+		script(src="/chat/js/functions.js")
+		script(src="/chat/js/socketevents.js")

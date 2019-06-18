@@ -1,0 +1,21 @@
+.messages-container {
+	height: calc(100% - #{$chatbox-height});
+	flex: 1;
+
+	padding-left: $side-padding;
+	padding-right: $side-padding;
+
+	background: inherit;
+
+	.messages li {
+		padding-top: 10px;
+		padding-bottom: 10px;
+		
+		overflow-wrap: anywhere;
+		border-bottom: 1px solid $dtheme-placeholder-text;
+	
+		.message-timestamp {
+			color: $dtheme-inactive-text;
+		}
+	}
+}
