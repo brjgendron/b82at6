@@ -43,7 +43,7 @@ if (process.env.NODE_ENV === "dev") {
 	sessionCfg.cookie.httpOnly = false;
 	sessionCfg.cookie.secure = false;
 } else if (process.env.NODE_ENV === "prod") {
-	router.set("trust proxy", 1);
+	app.set("trust proxy", 1);
 	sessionCfg.cookie.httpOnly = true;
 	sessionCfg.cookie.secure = true;
 }
