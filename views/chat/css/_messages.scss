@@ -7,15 +7,24 @@
 
 	background: inherit;
 
-	.messages li {
-		padding-top: 10px;
-		padding-bottom: 10px;
+	.messages .message {
+		padding-top: 0.5rem;
+		padding-bottom: 0.5rem;
 		
 		overflow-wrap: anywhere;
 		border-bottom: 1px solid $dtheme-placeholder-text;
-	
-		.message-timestamp {
-			color: $dtheme-inactive-text;
+		
+		.username-timestamp {
+			.message-timestamp {
+				padding-left: 0.5rem;
+
+				color: $dtheme-inactive-text;
+				font-size: 0.85rem;
+			}
+		}
+
+		.message-body {
+			padding-top: 0.25rem;
 		}
 	}
 }

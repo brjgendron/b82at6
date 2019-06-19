@@ -1,24 +1,31 @@
 // modules
 const
 	express = require("express"),
+	pug     = require("pug"),
 	io      = require("../index").io,
-	pool    = require("../util/database").pool;
+	pool    = require("../util/database").pool,
 	router  = express.Router();
 // middleware
 
 // routes
 router.route("/")
 	.get((req, res) => {
-		res.render("chat/templates/chat");
+		if (!req.session.username) {
+			res.redirect("/account/signup");
+		} else {
+			res.render("chat/templates/chat");
+		}
 	});
 
 io.on("connect", socket => {
 	const sessionUsername = socket.handshake.session.username;
 	let connectedUsers = [];
+	let templatePath = "views/chat/templates/message.pug";
+	let templateOptions = {};
 
 	pool.query("SELECT * FROM messages", (err, rows) => {
 		if (err) console.error(err);
-
+		
 		if (rows.length > 0) {
 			if (rows.length >= 50) {
 				let offset = rows.length - 50;
@@ -26,11 +33,25 @@ io.on("connect", socket => {
 
 				for (var i = offset; i < rows.length; i++) {
 					console.log(i);
-					io.to(socket.id).emit("show previous messages", rows[i]);
+					templateOptions = {
+						userid: rows[i].senderID,
+						username: rows[i].senderUsername,
+						usercolor: rows[i].senderColorHSL,
+						timestamp: rows[i].messageTimestamp,
+						messagebody: rows[i].contents
+					}
+					io.to(socket.id).emit("show previous messages", rows[i], pug.renderFile(templatePath, templateOptions));
 				}
 			} else {
 				for (var i = 0; i < rows.length; i++) {
-					io.to(socket.id).emit("show previous messages", rows[i]);
+					templateOptions = {
+						userid: rows[i].senderID,
+						username: rows[i].senderUsername,
+						usercolor: rows[i].senderColorHSL,
+						timestamp: rows[i].messageTimestamp,
+						messagebody: rows[i].contents
+					}
+					io.to(socket.id).emit("show previous messages", rows[i], pug.renderFile(templatePath, templateOptions));
 				}
 			}
 		}
@@ -73,7 +94,16 @@ io.on("connect", socket => {
 
 					pool.query("SELECT * FROM messages WHERE id = ?", res.insertId, (err, rows) => {
 						if (err) console.error(err);
-						io.emit("chat message", rows[0]);
+
+						let templateOptions = {
+							userid: rows[0].senderID,
+							username: rows[0].senderUsername,
+							usercolor: rows[0].senderColorHSL,
+							timestamp: rows[0].messageTimestamp,
+							messagebody: rows[0].contents
+						};
+
+						io.emit("chat message", rows[0], pug.renderFile(templatePath, templateOptions));
 					})
 				});
 			});

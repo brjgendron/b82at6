@@ -50,7 +50,7 @@ router.route("/signup")
 				req.session.username = req.body.username;
 				req.session.password = hash;
 
-				res.send("created and logged in to account " + req.body.username);
+				res.redirect("../../chat");
 			} else {
 				res.status(418).send("that account already exists");
 			}
@@ -75,9 +75,8 @@ router.route("/login")
 				req.session.username = req.body.username;
 				req.session.password = hash;
 				console.log("logged in to account " + req.body.username);
-				res.send("logged in to account " + req.body.username);
-
-				module.exports = { sessionUsername: req.session.username };
+				res.redirect("../../chat");
+				// module.exports = { sessionUsername: req.session.username };
 			}
 		});
 	});

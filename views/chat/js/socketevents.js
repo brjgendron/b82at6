@@ -26,30 +26,15 @@
 		console.log(`user ${user.username} has connected`);
 	});
 
-	socket.on("show previous messages", (data) => {
-		messages.appendChild(
-			generateItem(
-				{ id: data.senderID, username: data.senderUsername, color: data.senderColorHSL },
-				{ html: "span", class: "message-timestamp", contents: `[${data.messageTimestamp}] ` },
-				{ html: "span", class: data.senderID, contents: data.senderUsernameWithID },
-				{ html: "span", class: "message-text", contents: `: ${data.contents}`}
-			)
-		);
-
+	socket.on("show previous messages", (data, messageTemplate) => {
+		messages.insertAdjacentHTML("beforeend", messageTemplate);
 		scrollToBottom("messages-container");
 	});
 
-	socket.on("chat message", (message) => {
-		messages.appendChild(
-			generateItem(
-				{ id: message.senderID, username: message.senderUsername, color: message.senderColorHSL },
-				{ html: "span", class: "message-timestamp", contents: `[${message.messageTimestamp}] ` },
-				{ html: "span", class: message.senderID, contents: message.senderUsernameWithID },
-				{ html: "span", class: "message-text", contents: `: ${message.contents}` }
-			)
-		);
-		
+	socket.on("chat message", (message, messageTemplate) => {
+		messages.insertAdjacentHTML("beforeend", messageTemplate);
 		scrollToBottom("messages-container");
+		
 		console.log(message);
 	});
 

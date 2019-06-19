@@ -55,15 +55,21 @@ body ul {
   background: inherit;
 }
 
-.messages-container .messages li {
-  padding-top: 10px;
-  padding-bottom: 10px;
+.messages-container .messages .message {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   overflow-wrap: anywhere;
   border-bottom: 1px solid #4d4d4d;
 }
 
-.messages-container .messages li .message-timestamp {
+.messages-container .messages .message .username-timestamp .message-timestamp {
+  padding-left: 0.5rem;
   color: #999999;
+  font-size: 0.85rem;
+}
+
+.messages-container .messages .message .message-body {
+  padding-top: 0.25rem;
 }
 
 .chatbox-container {
