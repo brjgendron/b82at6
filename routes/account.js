@@ -68,7 +68,7 @@ router.route("/login")
 		accMgmt.login(req.body.username, req.body.password, (err, hash, exists) => {
 			if (err) {
 				res.status(418).send(err);
-				console.log(err);
+				console.error(err);
 			}
 
 			if (exists) {
@@ -86,7 +86,7 @@ router.route("/logout")
 	.get((req, res) => {
 		req.session.destroy(err => {
 			if (err) {
-				console.log(err);
+				console.error(err);
 				res.status(418).send("there was an error");
 			} else {
 				res.send("you have logged out of your account");

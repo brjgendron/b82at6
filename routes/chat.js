@@ -17,7 +17,7 @@ io.on("connect", socket => {
 	let connectedUsers = [];
 
 	pool.query("SELECT * FROM messages", (err, rows) => {
-		if (err) throw err;
+		if (err) console.error(err);
 
 		if (rows.length > 0) {
 			if (rows.length >= 50) {
@@ -38,7 +38,7 @@ io.on("connect", socket => {
 
 	let query = "SELECT id, username, color, globalAdmin FROM users WHERE username = ?";
 	pool.query(query, sessionUsername, (err, rows) => {
-		if (err) throw err;
+		if (err) console.error(err);
 		if (rows.length !== 0) {
 			const userSet = {
 				id: rows[0].id,
@@ -69,10 +69,10 @@ io.on("connect", socket => {
 				};
 
 				pool.query(sql.query, sql.set, (err, res) => {
-					if (err) throw err;
+					if (err) console.error(err);
 
 					pool.query("SELECT * FROM messages WHERE id = ?", res.insertId, (err, rows) => {
-						if (err) throw err;
+						if (err) console.error(err);
 						io.emit("chat message", rows[0]);
 					})
 				});
