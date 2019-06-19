@@ -64,12 +64,11 @@ io.on("connect", socket => {
 				};
 				
 				let sql = {
-					query: "INSERT INTO ?? SET ?",
-					table: "messages",
+					query: "INSERT INTO messages SET ?",
 					set: messageSet
 				};
 
-				pool.query(sql.query, [ sql.table, sql.set ], (err, res) => {
+				pool.query(sql.query, sql.set, (err, res) => {
 					if (err) throw err;
 
 					pool.query("SELECT * FROM messages WHERE id = ?", res.insertId, (err, rows) => {
